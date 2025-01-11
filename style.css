@@ -142,3 +142,8 @@ th {
     padding: 4px 8px; /* Noch weniger Innenabstand */
   }
 }
+
+/* Versteckt Elemente */
+.hidden {
+  display: none;
+}

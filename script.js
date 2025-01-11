@@ -359,19 +359,23 @@ function renderEndrunde(endrundeSpiele) {
  * Aktualisiert die Endrunde-Teams basierend auf den Ergebnissen der Halbfinale.
  * @param {Array} endrundeSpiele - Das Array der Endrunde-Spiele.
  * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
- * @param {Array} spielplan - Das Array der Gruppenspiele, um direkte Vergleiche zu ermöglichen.
+ * @param {Array} spielplan - Das Array der Gruppenspiele.
  */
 function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
   // Halbfinale finden
-  const halbfinale1 = endrundeSpiele.find((spiel) => spiel.nr === 21);
-  const halbfinale2 = endrundeSpiele.find((spiel) => spiel.nr === 22);
+  const halbfinale1 = endrundeSpiele.find(
+    (spiel) => spiel.platz === "1. Halbfinale"
+  );
+  const halbfinale2 = endrundeSpiele.find(
+    (spiel) => spiel.platz === "2. Halbfinale"
+  );
 
   if (!halbfinale1) {
-    console.warn("Halbfinale 1 (Nr. 21) wurde nicht gefunden.");
+    console.warn("Halbfinale 1 (1. Halbfinale) wurde nicht gefunden.");
   }
 
   if (!halbfinale2) {
-    console.warn("Halbfinale 2 (Nr. 22) wurde nicht gefunden.");
+    console.warn("Halbfinale 2 (2. Halbfinale) wurde nicht gefunden.");
   }
 
   const siegerHalbfinale1 = halbfinale1
@@ -389,7 +393,7 @@ function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
     : null;
 
   // Sieger Halbfinale I -> Heim des Endspiels (Nr. 26)
-  const endspiel = endrundeSpiele.find((spiel) => spiel.nr === 26);
+  const endspiel = endrundeSpiele.find((spiel) => spiel.platz === "Endspiel");
   if (endspiel) {
     if (siegerHalbfinale1) {
       endspiel.heim = siegerHalbfinale1;
@@ -405,11 +409,13 @@ function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
       console.warn("Sieger Halbfinale 2 ist nicht festgelegt.");
     }
   } else {
-    console.warn("Endspiel (Nr. 26) wurde nicht gefunden.");
+    console.warn("Endspiel wurde nicht gefunden.");
   }
 
   // Verlierer Halbfinale I und II -> Heim und Gast des Spiels um Platz 3 und 4 (Nr. 25)
-  const spielUmPlatz3und4 = endrundeSpiele.find((spiel) => spiel.nr === 25);
+  const spielUmPlatz3und4 = endrundeSpiele.find(
+    (spiel) => spiel.platz === "Spiel um Platz 3 und 4"
+  );
   if (spielUmPlatz3und4) {
     if (verliererHalbfinale1) {
       spielUmPlatz3und4.heim = verliererHalbfinale1;
@@ -425,7 +431,7 @@ function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
       console.warn("Verlierer Halbfinale 2 ist nicht festgelegt.");
     }
   } else {
-    console.warn("Spiel um Platz 3 und 4 (Nr. 25) wurde nicht gefunden.");
+    console.warn("Spiel um Platz 3 und 4 wurde nicht gefunden.");
   }
 
   // Weitere Spiele um Platz 5 und 6 sowie 7 und 8 können hier ebenfalls aktualisiert werden
@@ -504,18 +510,18 @@ function handleEndrundeRendering(endrundeSpiele, mannschaften, spielplan) {
   const endrundeSection = document.getElementById("endrunde-section");
   const endrundeHinweis = document.getElementById("endrunde-hinweis");
 
-  if (areAllGroupGamesFinished(mannschaften.gruppen, spielplan)) {
+  if (areAllGroupGamesFinished(gruppen, spielplan)) {
     // Endrunde-Teams aktualisieren
     updateEndrunde(endrundeSpiele, mannschaften, spielplan);
 
     // Endrunde rendern
     renderEndrunde(endrundeSpiele);
 
-    // Sichtbarkeit der Endrunde freigeben
+    // Sichtbarkeit der Endrunde freigeben und Hinweis verstecken
     endrundeSection.classList.remove("hidden");
     endrundeHinweis.classList.add("hidden");
   } else {
-    // Endrunde verbergen, wenn nicht alle Gruppenspiele abgeschlossen sind
+    // Endrunde verbergen und Hinweis anzeigen
     endrundeSection.classList.add("hidden");
     endrundeHinweis.classList.remove("hidden");
   }
