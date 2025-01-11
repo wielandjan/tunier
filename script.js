@@ -1,12 +1,8 @@
+// Lade die Turnierdetails
 fetch("turnierdetails.json?v=" + new Date().getTime())
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP-Fehler: ${response.status}`);
-    }
-    return response.json();
-  })
+  .then((response) => response.json())
   .then((data) => {
-    // Header-Daten einfügen
+    // Header-Daten
     document.getElementById("titel").textContent = data.titel;
     document.getElementById("untertitel").textContent = data.untertitel;
     document.getElementById("datum").textContent = `Am ${data.datum}`;
@@ -16,7 +12,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       Pause: <strong>${data.pause}</strong> min
     `;
 
-    // Gruppen dynamisch laden
+    // Gruppen anzeigen
     const gruppenContainer = document.getElementById("gruppen-container");
     Object.entries(data.gruppen).forEach(([gruppenName, mannschaften]) => {
       const gruppeDiv = document.createElement("div");
@@ -55,6 +51,47 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       gruppenContainer.appendChild(gruppeDiv);
     });
   })
-  .catch((error) => {
-    console.error("Fehler beim Laden der Turnierdetails:", error);
-  });
+  .catch((error) =>
+    console.error("Fehler beim Laden der Turnierdetails:", error)
+  );
+
+// Lade den Spielplan
+fetch("spielplan.json?v=" + new Date().getTime())
+  .then((response) => response.json())
+  .then((spielplanData) => {
+    const spielplanContainer = document.getElementById("spielplan-container");
+    let spielplanHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Nr.</th>
+            <th>Beginn</th>
+            <th>Feld</th>
+            <th>Heim</th>
+            <th>Gast</th>
+            <th>Ergebnis</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    spielplanData.spielplan.forEach((spiel) => {
+      spielplanHTML += `
+        <tr>
+          <td>${spiel.nr}</td>
+          <td>${spiel.beginn}</td>
+          <td>${spiel.feld}</td>
+          <td>${spiel.heim}</td>
+          <td>${spiel.gast}</td>
+          <td>${spiel.ergebnis}</td>
+        </tr>
+      `;
+    });
+
+    spielplanHTML += `
+        </tbody>
+      </table>
+    `;
+    spielplanContainer.innerHTML = spielplanHTML;
+  })
+  .catch((error) => console.error("Fehler beim Laden des Spielplans:", error));
