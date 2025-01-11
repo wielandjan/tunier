@@ -1,4 +1,4 @@
-fetch("turnierdaten.json?v=1") // Cache-Busting durch Anhängen einer Versionsnummer
+fetch("turnierdaten.json")
   .then((response) => {
     if (!response.ok) {
       throw new Error(`HTTP-Fehler: ${response.status}`);
@@ -6,7 +6,8 @@ fetch("turnierdaten.json?v=1") // Cache-Busting durch Anhängen einer Versionsnu
     return response.json();
   })
   .then((data) => {
-    // Header-Daten einfügen
+    console.log("Geladene Daten:", data); // Debug-Ausgabe
+    // Dynamische Inhalte hinzufügen
     document.getElementById("titel").textContent = data.titel;
     document.getElementById("untertitel").textContent = data.untertitel;
     document.getElementById("datum").textContent = `Am ${data.datum}`;
@@ -14,13 +15,11 @@ fetch("turnierdaten.json?v=1") // Cache-Busting durch Anhängen einer Versionsnu
       "details"
     ).textContent = `Beginn: ${data.beginn} | Spielzeit: ${data.spielzeit} | Pause: ${data.pause}`;
 
-    // Gruppen dynamisch erstellen
     const gruppenContainer = document.getElementById("gruppen-container");
     Object.entries(data.gruppen).forEach(([gruppenName, mannschaften]) => {
       const gruppeDiv = document.createElement("div");
       gruppeDiv.className = "gruppe";
 
-      // Tabelle erstellen
       let tabelleHTML = `
         <table>
           <thead>
@@ -31,7 +30,6 @@ fetch("turnierdaten.json?v=1") // Cache-Busting durch Anhängen einer Versionsnu
           <tbody>
       `;
 
-      // Mannschaften dynamisch hinzufügen
       mannschaften.forEach((team, index) => {
         tabelleHTML += `
           <tr>
@@ -46,11 +44,10 @@ fetch("turnierdaten.json?v=1") // Cache-Busting durch Anhängen einer Versionsnu
         </table>
       `;
 
-      // Tabelle zum Gruppen-Div hinzufügen
       gruppeDiv.innerHTML = tabelleHTML;
       gruppenContainer.appendChild(gruppeDiv);
     });
   })
   .catch((error) => {
-    console.error("Fehler beim Laden der Turnierdaten:", error);
+    console.error("Fehler beim Laden der JSON-Datei:", error);
   });
