@@ -1,42 +1,116 @@
+/* Allgemeine Stile */
 body {
   font-family: Arial, sans-serif;
-  text-align: center;
   margin: 20px;
+  line-height: 1.6;
+  text-align: center; /* Zentriere den gesamten Text */
 }
 
 header {
+  display: flex; /* Nutze Flexbox für präzise Zentrierung */
+  flex-direction: column; /* Elemente untereinander anordnen */
+  align-items: center; /* Zentriere horizontal */
+  justify-content: center; /* Zentriere vertikal */
   margin-bottom: 30px;
 }
 
 header h1 {
-  font-size: 1.5em;
+  font-size: 2em; /* Große Schrift für den Titel */
+  margin-bottom: 10px;
 }
 
 header p {
-  font-size: 1em;
-  margin: 5px 0;
+  font-size: 1.1em; /* Einheitliche Schriftgröße */
+  margin: 5px 0; /* Kein übermäßiger Abstand */
 }
 
-.gruppen,
-.spielplan {
+header p strong {
+  font-weight: bold;
+}
+
+#details {
+  display: inline-block; /* Macht die Details zu einem Block */
+  text-align: center; /* Zentriere den Text innerhalb des Blocks */
+  white-space: nowrap; /* Verhindert Umbrüche innerhalb der Zeile */
+}
+
+section {
   margin-top: 20px;
 }
 
-table {
+section h2 {
+  font-size: 1.5em; /* Überschrift für die Gruppen */
+  margin-bottom: 15px;
+}
+
+/* Tabellengruppen */
+.gruppen {
+  display: flex;
+  justify-content: center; /* Zentriere die Tabellen horizontal */
+  flex-wrap: wrap; /* Erlaube Umbruch auf kleineren Bildschirmen */
+  gap: 20px; /* Abstand zwischen den Tabellen */
+}
+
+/* Tabellenstile */
+.gruppe table {
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 300px; /* Begrenze die Breite der Tabellen */
   border-collapse: collapse;
+  text-align: left;
   border: 1px solid #000;
 }
 
-th,
-td {
+.gruppe th {
+  background-color: #ccc;
+  text-align: center;
+  padding: 8px;
+}
+
+.gruppe td {
   padding: 8px;
   border: 1px solid #000;
-  text-align: center;
+  text-align: left;
 }
 
-th {
-  background-color: #ccc;
+/* Responsive Stile: Kleinere Schrift auf kleineren Bildschirmen */
+@media screen and (max-width: 768px) {
+  /* Kopfbereich */
+  header h1 {
+    font-size: 1.5em; /* Verkleinere den Titel */
+  }
+
+  header p {
+    font-size: 1em; /* Verkleinere die Details */
+  }
+
+  /* Tabellen */
+  .gruppe table {
+    font-size: 14px; /* Reduziere die Schriftgröße in den Tabellen */
+  }
+
+  .gruppe td,
+  .gruppe th {
+    padding: 6px; /* Weniger Innenabstand */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Kopfbereich */
+  header h1 {
+    font-size: 1.2em; /* Noch kleinere Schrift für den Titel */
+  }
+
+  header p {
+    font-size: 0.9em; /* Verkleinere die Details noch weiter */
+  }
+
+  /* Tabellen */
+  .gruppe table {
+    font-size: 12px; /* Noch kleinere Schrift in den Tabellen */
+  }
+
+  .gruppe td,
+  .gruppe th {
+    padding: 4px; /* Noch weniger Innenabstand */
+  }
 }

@@ -1,4 +1,3 @@
-// Funktion zum Laden und Anzeigen von Turnierdetails
 fetch("turnierdetails.json?v=" + new Date().getTime())
   .then((response) => {
     if (!response.ok) {
@@ -16,8 +15,6 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       Spielzeit: <strong>${data.spielzeit}</strong> min |
       Pause: <strong>${data.pause}</strong> min
     `;
-
-    console.log("Header erfolgreich geladen.");
 
     // Gruppen dynamisch laden
     const gruppenContainer = document.getElementById("gruppen-container");
@@ -57,8 +54,6 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       gruppeDiv.innerHTML = tabelleHTML;
       gruppenContainer.appendChild(gruppeDiv);
     });
-
-    console.log("Gruppen erfolgreich geladen.");
   })
   .catch((error) => {
     console.error("Fehler beim Laden der Turnierdetails:", error);
