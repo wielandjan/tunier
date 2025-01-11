@@ -27,9 +27,9 @@
 
     // Bedingtes Rendern der Endrunde
     handleEndrundeRendering(
-      endrundeData.endrunde.spiele,
-      mannschaften,
-      endrundeData.endrunde.spiele
+      endrundeData.endrunde.spiele, // Endrunde-Spiele
+      mannschaften, // Mannschaftsdaten
+      spielplanData.spielplan // Gruppenspielplan
     );
   } catch (error) {
     console.error("Fehler beim Laden der Daten:", error);
@@ -359,9 +359,9 @@ function renderEndrunde(endrundeSpiele) {
  * Aktualisiert die Endrunde-Teams basierend auf den Ergebnissen der Halbfinale.
  * @param {Array} endrundeSpiele - Das Array der Endrunde-Spiele.
  * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
- * @param {Array} endrundeSpieleArray - Das Array der Endrunde-Spiele zur Weiterverarbeitung.
+ * @param {Array} spielplan - Das Array der Gruppenspiele.
  */
-function updateEndrunde(endrundeSpiele, mannschaften, endrundeSpieleArray) {
+function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
   // Halbfinale finden
   const halbfinale1 = endrundeSpiele.find((spiel) => spiel.nr === 21);
   const halbfinale2 = endrundeSpiele.find((spiel) => spiel.nr === 22);
@@ -479,11 +479,10 @@ function getVerlierer(spiel, mannschaften) {
 
 /**
  * Überprüft, ob alle Gruppenspiele abgeschlossen sind.
- * @param {Object} gruppen - Die Gruppen aus den Turnierdetails.
- * @param {Array} spielplan - Das Array der Spiele.
+ * @param {Array} spielplan - Das Array der Gruppenspiele.
  * @returns {Boolean} - True, wenn alle Gruppenspiele abgeschlossen sind, sonst False.
  */
-function areAllGroupGamesFinished(gruppen, spielplan) {
+function areAllGroupGamesFinished(spielplan) {
   // Gruppenspiele identifizieren (angenommen: Nr. <= 20)
   const groupGames = spielplan.filter((spiel) => spiel.nr <= 20);
   return groupGames.every(
@@ -498,28 +497,24 @@ function areAllGroupGamesFinished(gruppen, spielplan) {
  * Rendert die Endrunde bedingt und zeigt den Abschnitt an, wenn alle Gruppenspiele abgeschlossen sind.
  * @param {Array} endrundeSpiele - Das Array der Endrunde-Spiele.
  * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
- * @param {Array} endrundeSpieleArray - Das Array der Endrunde-Spiele zur Weiterverarbeitung.
+ * @param {Array} spielplan - Das Array der Gruppenspiele.
  */
-function handleEndrundeRendering(
-  endrundeSpiele,
-  mannschaften,
-  endrundeSpieleArray
-) {
+function handleEndrundeRendering(endrundeSpiele, mannschaften, spielplan) {
   const endrundeSection = document.getElementById("endrunde-section");
   const endrundeHinweis = document.getElementById("endrunde-hinweis");
 
-  if (areAllGroupGamesFinished(mannschaften.gruppen, endrundeSpieleArray)) {
+  if (areAllGroupGamesFinished(spielplan)) {
     // Endrunde-Teams aktualisieren
-    updateEndrunde(endrundeSpiele, mannschaften, endrundeSpieleArray);
+    updateEndrunde(endrundeSpiele, mannschaften, spielplan);
 
     // Endrunde rendern
     renderEndrunde(endrundeSpiele);
 
-    // Sichtbarkeit der Endrunde freigeben
+    // Sichtbarkeit der Endrunde freigeben und Hinweis verstecken
     endrundeSection.classList.remove("hidden");
     endrundeHinweis.classList.add("hidden");
   } else {
-    // Endrunde verbergen, wenn nicht alle Gruppenspiele abgeschlossen sind
+    // Endrunde verbergen und Hinweis anzeigen
     endrundeSection.classList.add("hidden");
     endrundeHinweis.classList.remove("hidden");
   }
