@@ -9,13 +9,14 @@ function berechnePunkteUndTore(gruppen, spielplan) {
       mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore auf 0
     });
 
+  console.log("Initialisierte Mannschaften:", mannschaften);
+
   // Ergebnisse aus dem Spielplan verarbeiten
   spielplan.forEach((spiel) => {
     if (spiel.ergebnis && spiel.ergebnis.includes(":")) {
       // Überprüfe, ob ein gültiges Ergebnis vorliegt
       const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
 
-      // Berechne nur, wenn Tore valide sind
       if (!isNaN(toreHeim) && !isNaN(toreGast)) {
         // Tore aktualisieren
         mannschaften[spiel.heim].tore += toreHeim;
@@ -34,6 +35,7 @@ function berechnePunkteUndTore(gruppen, spielplan) {
     }
   });
 
+  console.log("Berechnete Punkte und Tore:", mannschaften);
   return mannschaften;
 }
 
