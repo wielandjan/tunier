@@ -115,4 +115,13 @@ section h2 {
   .spielplan td {
     padding: 4px; /* Noch weniger Innenabstand */
   }
+
+  /* Endrunde-Tabellenstile */
+  .endrunde table {
+    background-color: #f9f9f9;
+  }
+
+  .endrunde th {
+    background-color: #e2e2e2;
+  }
 }

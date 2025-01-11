@@ -1,0 +1,57 @@
+{
+  "endrunde": {
+    "beginn": "16:15",
+    "spielzeit": "1 x 10:00",
+    "pause": "01:00",
+    "spiele": [
+      {
+        "nr": 21,
+        "platz": "1. Halbfinale",
+        "beginn": "16:15",
+        "heim": "Platzhalter",
+        "gast": "Platzhalter",
+        "ergebnis": ":"
+      },
+      {
+        "nr": 22,
+        "platz": "2. Halbfinale",
+        "beginn": "16:26",
+        "heim": "Platzhalter",
+        "gast": "Platzhalter",
+        "ergebnis": ":"
+      },
+      {
+        "nr": 23,
+        "platz": "Spiel um Platz 7 und 8",
+        "beginn": "16:37",
+        "heim": "Platzhalter",
+        "gast": "Platzhalter",
+        "ergebnis": ":"
+      },
+      {
+        "nr": 24,
+        "platz": "Spiel um Platz 5 und 6",
+        "beginn": "16:48",
+        "heim": "Platzhalter",
+        "gast": "Platzhalter",
+        "ergebnis": ":"
+      },
+      {
+        "nr": 25,
+        "platz": "Spiel um Platz 3 und 4",
+        "beginn": "16:59",
+        "heim": "Platzhalter",
+        "gast": "Platzhalter",
+        "ergebnis": ":"
+      },
+      {
+        "nr": 26,
+        "platz": "Endspiel",
+        "beginn": "17:10",
+        "heim": "Platzhalter",
+        "gast": "Platzhalter",
+        "ergebnis": ":"
+      }
+    ]
+  }
+}
