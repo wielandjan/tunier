@@ -29,7 +29,7 @@
     handleEndrundeRendering(
       endrundeData.endrunde.spiele,
       mannschaften,
-      spielplanData.spielplan
+      endrundeData.endrunde.spiele
     );
   } catch (error) {
     console.error("Fehler beim Laden der Daten:", error);
@@ -359,28 +359,53 @@ function renderEndrunde(endrundeSpiele) {
  * Aktualisiert die Endrunde-Teams basierend auf den Ergebnissen der Halbfinale.
  * @param {Array} endrundeSpiele - Das Array der Endrunde-Spiele.
  * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
- * @param {Array} spielplan - Das Array der Spiele, um direkte Vergleiche zu ermöglichen.
+ * @param {Array} endrundeSpieleArray - Das Array der Endrunde-Spiele zur Weiterverarbeitung.
  */
-function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
+function updateEndrunde(endrundeSpiele, mannschaften, endrundeSpieleArray) {
   // Halbfinale finden
-  const halbfinale1 = spielplan.find((spiel) => spiel.nr === 21);
-  const halbfinale2 = spielplan.find((spiel) => spiel.nr === 22);
+  const halbfinale1 = endrundeSpiele.find((spiel) => spiel.nr === 21);
+  const halbfinale2 = endrundeSpiele.find((spiel) => spiel.nr === 22);
 
-  const siegerHalbfinale1 = getSieger(halbfinale1, mannschaften);
-  const siegerHalbfinale2 = getSieger(halbfinale2, mannschaften);
+  if (!halbfinale1) {
+    console.warn("Halbfinale 1 (Nr. 21) wurde nicht gefunden.");
+  }
 
-  const verliererHalbfinale1 = getVerlierer(halbfinale1, mannschaften);
-  const verliererHalbfinale2 = getVerlierer(halbfinale2, mannschaften);
+  if (!halbfinale2) {
+    console.warn("Halbfinale 2 (Nr. 22) wurde nicht gefunden.");
+  }
+
+  const siegerHalbfinale1 = halbfinale1
+    ? getSieger(halbfinale1, mannschaften)
+    : null;
+  const siegerHalbfinale2 = halbfinale2
+    ? getSieger(halbfinale2, mannschaften)
+    : null;
+
+  const verliererHalbfinale1 = halbfinale1
+    ? getVerlierer(halbfinale1, mannschaften)
+    : null;
+  const verliererHalbfinale2 = halbfinale2
+    ? getVerlierer(halbfinale2, mannschaften)
+    : null;
 
   // Sieger Halbfinale I -> Heim des Endspiels (Nr. 26)
   const endspiel = endrundeSpiele.find((spiel) => spiel.nr === 26);
-  if (endspiel && siegerHalbfinale1) {
-    endspiel.heim = siegerHalbfinale1;
-  }
+  if (endspiel) {
+    if (siegerHalbfinale1) {
+      endspiel.heim = siegerHalbfinale1;
+    } else {
+      endspiel.heim = "Sieger Halbfinale I"; // Platzhalter
+      console.warn("Sieger Halbfinale 1 ist nicht festgelegt.");
+    }
 
-  // Sieger Halbfinale II -> Gast des Endspiels (Nr. 26)
-  if (endspiel && siegerHalbfinale2) {
-    endspiel.gast = siegerHalbfinale2;
+    if (siegerHalbfinale2) {
+      endspiel.gast = siegerHalbfinale2;
+    } else {
+      endspiel.gast = "Sieger Halbfinale II"; // Platzhalter
+      console.warn("Sieger Halbfinale 2 ist nicht festgelegt.");
+    }
+  } else {
+    console.warn("Endspiel (Nr. 26) wurde nicht gefunden.");
   }
 
   // Verlierer Halbfinale I und II -> Heim und Gast des Spiels um Platz 3 und 4 (Nr. 25)
@@ -388,10 +413,19 @@ function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
   if (spielUmPlatz3und4) {
     if (verliererHalbfinale1) {
       spielUmPlatz3und4.heim = verliererHalbfinale1;
+    } else {
+      spielUmPlatz3und4.heim = "Verlierer Halbfinale I"; // Platzhalter
+      console.warn("Verlierer Halbfinale 1 ist nicht festgelegt.");
     }
+
     if (verliererHalbfinale2) {
       spielUmPlatz3und4.gast = verliererHalbfinale2;
+    } else {
+      spielUmPlatz3und4.gast = "Verlierer Halbfinale II"; // Platzhalter
+      console.warn("Verlierer Halbfinale 2 ist nicht festgelegt.");
     }
+  } else {
+    console.warn("Spiel um Platz 3 und 4 (Nr. 25) wurde nicht gefunden.");
   }
 
   // Weitere Spiele um Platz 5 und 6 sowie 7 und 8 können hier ebenfalls aktualisiert werden
@@ -404,6 +438,7 @@ function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
  * @returns {String|null} - Der Name des Siegers oder null bei Unentschieden.
  */
 function getSieger(spiel, mannschaften) {
+  if (!spiel) return null;
   if (
     spiel.ergebnis &&
     spiel.ergebnis.includes(":") &&
@@ -426,6 +461,7 @@ function getSieger(spiel, mannschaften) {
  * @returns {String|null} - Der Name des Verlierers oder null bei Unentschieden.
  */
 function getVerlierer(spiel, mannschaften) {
+  if (!spiel) return null;
   if (
     spiel.ergebnis &&
     spiel.ergebnis.includes(":") &&
@@ -459,44 +495,32 @@ function areAllGroupGamesFinished(gruppen, spielplan) {
 }
 
 /**
- * Überprüft, ob alle Halbfinalspiele abgeschlossen sind.
- * @param {Array} spielplan - Das Array der Spiele.
- * @returns {Boolean} - True, wenn alle Halbfinalspiele abgeschlossen sind, sonst False.
- */
-function areAllSemifinalGamesFinished(spielplan) {
-  const semifinalGames = spielplan.filter(
-    (spiel) => spiel.nr === 21 || spiel.nr === 22
-  );
-  return semifinalGames.every(
-    (spiel) =>
-      spiel.ergebnis &&
-      spiel.ergebnis.trim() !== ":" &&
-      spiel.ergebnis.includes(":")
-  );
-}
-
-/**
  * Rendert die Endrunde bedingt und zeigt den Abschnitt an, wenn alle Gruppenspiele abgeschlossen sind.
  * @param {Array} endrundeSpiele - Das Array der Endrunde-Spiele.
  * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
- * @param {Array} spielplan - Das Array der Spiele.
+ * @param {Array} endrundeSpieleArray - Das Array der Endrunde-Spiele zur Weiterverarbeitung.
  */
-function handleEndrundeRendering(endrundeSpiele, mannschaften, spielplan) {
+function handleEndrundeRendering(
+  endrundeSpiele,
+  mannschaften,
+  endrundeSpieleArray
+) {
   const endrundeSection = document.getElementById("endrunde-section");
+  const endrundeHinweis = document.getElementById("endrunde-hinweis");
 
-  if (areAllGroupGamesFinished(mannschaften.gruppen, spielplan)) {
+  if (areAllGroupGamesFinished(mannschaften.gruppen, endrundeSpieleArray)) {
     // Endrunde-Teams aktualisieren
-    updateEndrunde(endrundeSpiele, mannschaften, spielplan);
+    updateEndrunde(endrundeSpiele, mannschaften, endrundeSpieleArray);
 
     // Endrunde rendern
     renderEndrunde(endrundeSpiele);
 
     // Sichtbarkeit der Endrunde freigeben
     endrundeSection.classList.remove("hidden");
-
-    // Optional: Weitere Überprüfungen oder Hervorhebungen durchführen
+    endrundeHinweis.classList.add("hidden");
   } else {
     // Endrunde verbergen, wenn nicht alle Gruppenspiele abgeschlossen sind
     endrundeSection.classList.add("hidden");
+    endrundeHinweis.classList.remove("hidden");
   }
 }

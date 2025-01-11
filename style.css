@@ -143,5 +143,12 @@ section h2 {
     font-weight: bold;
   }
 
+  /* Zusätzliche Stile für den Hinweis */
+  #endrunde-hinweis {
+    color: #555;
+    font-style: italic;
+    margin-top: 10px;
+  }
+
   /* Optional: Ähnliche Anpassungen für andere Tabellen */
 }
