@@ -7,7 +7,7 @@ body {
 }
 
 header {
-  text-align: center;
+  text-align: center; /* Zentriere den gesamten Kopfbereich */
   margin-bottom: 30px;
 }
 
@@ -19,11 +19,16 @@ header h1 {
 header p {
   font-size: 1.1em; /* Einheitliche Schriftgröße */
   margin: 5px 0; /* Kein übermäßiger Abstand */
-  white-space: nowrap; /* Verhindert Umbrüche innerhalb der Zeile */
 }
 
 header p strong {
   font-weight: bold;
+}
+
+#details {
+  display: inline-block; /* Macht die Details zu einem Block in der Mitte */
+  text-align: center; /* Zentriere den Text innerhalb des Blocks */
+  white-space: nowrap; /* Verhindert Umbrüche innerhalb der Zeile */
 }
 
 section {
