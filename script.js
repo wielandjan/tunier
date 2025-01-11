@@ -35,11 +35,12 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
           <tbody>
       `;
 
+      // Extrahiere die Namen der Mannschaften aus den Objekten
       mannschaften.forEach((team, index) => {
         tabelleHTML += `
           <tr>
             <td>${index + 1}.</td>
-            <td>${team}</td>
+            <td>${team.name}</td>
           </tr>
         `;
       });
