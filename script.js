@@ -11,19 +11,22 @@ function berechnePunkteUndTore(gruppen, spielplan) {
 
   // Ergebnisse aus dem Spielplan verarbeiten
   spielplan.forEach((spiel) => {
-    const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
+    if (spiel.ergebnis && spiel.ergebnis.includes(":")) {
+      // Überprüfe, ob ein gültiges Ergebnis vorliegt
+      const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
 
-    if (!isNaN(toreHeim) && !isNaN(toreGast)) {
-      mannschaften[spiel.heim].tore += toreHeim;
-      mannschaften[spiel.gast].tore += toreGast;
+      if (!isNaN(toreHeim) && !isNaN(toreGast)) {
+        mannschaften[spiel.heim].tore += toreHeim;
+        mannschaften[spiel.gast].tore += toreGast;
 
-      if (toreHeim > toreGast) {
-        mannschaften[spiel.heim].punkte += 3; // Heimsieg
-      } else if (toreHeim < toreGast) {
-        mannschaften[spiel.gast].punkte += 3; // Gastsieg
-      } else {
-        mannschaften[spiel.heim].punkte += 1; // Unentschieden
-        mannschaften[spiel.gast].punkte += 1;
+        if (toreHeim > toreGast) {
+          mannschaften[spiel.heim].punkte += 3; // Heimsieg
+        } else if (toreHeim < toreGast) {
+          mannschaften[spiel.gast].punkte += 3; // Gastsieg
+        } else {
+          mannschaften[spiel.heim].punkte += 1; // Unentschieden
+          mannschaften[spiel.gast].punkte += 1;
+        }
       }
     }
   });
@@ -121,5 +124,11 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
         `;
 
         spielplanContainer.innerHTML = spielplanHTML;
-      });
-  });
+      })
+      .catch((error) =>
+        console.error("Fehler beim Laden des Spielplans:", error)
+      );
+  })
+  .catch((error) =>
+    console.error("Fehler beim Laden der Turnierdetails:", error)
+  );
