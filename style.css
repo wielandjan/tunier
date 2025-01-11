@@ -7,7 +7,10 @@ body {
 }
 
 header {
-  text-align: center; /* Zentriere den gesamten Kopfbereich */
+  display: flex; /* Nutze Flexbox für präzise Zentrierung */
+  flex-direction: column; /* Elemente untereinander anordnen */
+  align-items: center; /* Zentriere horizontal */
+  justify-content: center; /* Zentriere vertikal */
   margin-bottom: 30px;
 }
 
@@ -26,7 +29,7 @@ header p strong {
 }
 
 #details {
-  display: inline-block; /* Macht die Details zu einem Block in der Mitte */
+  display: inline-block; /* Macht die Details zu einem Block */
   text-align: center; /* Zentriere den Text innerhalb des Blocks */
   white-space: nowrap; /* Verhindert Umbrüche innerhalb der Zeile */
 }
