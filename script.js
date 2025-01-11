@@ -392,7 +392,7 @@ function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
     ? getVerlierer(halbfinale2, mannschaften)
     : null;
 
-  // Sieger Halbfinale I -> Heim des Endspiels
+  // Sieger Halbfinale I -> Heim des Endspiels (Nr. 26)
   const endspiel = endrundeSpiele.find((spiel) => spiel.platz === "Endspiel");
   if (endspiel) {
     if (siegerHalbfinale1) {
@@ -412,7 +412,7 @@ function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
     console.warn("Endspiel wurde nicht gefunden.");
   }
 
-  // Verlierer Halbfinale I und II -> Heim und Gast des Spiels um Platz 3 und 4
+  // Verlierer Halbfinale I und II -> Heim und Gast des Spiels um Platz 3 und 4 (Nr. 25)
   const spielUmPlatz3und4 = endrundeSpiele.find(
     (spiel) => spiel.platz === "Spiel um Platz 3 und 4"
   );
@@ -485,10 +485,11 @@ function getVerlierer(spiel, mannschaften) {
 
 /**
  * Überprüft, ob alle Gruppenspiele abgeschlossen sind.
+ * @param {Object} gruppen - Die Gruppen aus den Turnierdetails.
  * @param {Array} spielplan - Das Array der Gruppenspiele.
  * @returns {Boolean} - True, wenn alle Gruppenspiele abgeschlossen sind, sonst False.
  */
-function areAllGroupGamesFinished(spielplan) {
+function areAllGroupGamesFinished(gruppen, spielplan) {
   // Gruppenspiele identifizieren (angenommen: Nr. <= 20)
   const groupGames = spielplan.filter((spiel) => spiel.nr <= 20);
   return groupGames.every(
@@ -509,7 +510,7 @@ function handleEndrundeRendering(endrundeSpiele, mannschaften, spielplan) {
   const endrundeSection = document.getElementById("endrunde-section");
   const endrundeHinweis = document.getElementById("endrunde-hinweis");
 
-  if (areAllGroupGamesFinished(spielplan)) {
+  if (areAllGroupGamesFinished(gruppen, spielplan)) {
     // Endrunde-Teams aktualisieren
     updateEndrunde(endrundeSpiele, mannschaften, spielplan);
 
