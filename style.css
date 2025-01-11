@@ -1,3 +1,4 @@
+/* Allgemeine Stile */
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
@@ -33,12 +34,15 @@ section h2 {
   margin-bottom: 15px;
 }
 
+/* Tabellengruppen */
 .gruppen {
   display: flex;
-  justify-content: center; /* Zentriere die Gruppen horizontal */
-  gap: 20px;
+  justify-content: center; /* Zentriere die Tabellen horizontal */
+  flex-wrap: wrap; /* Erlaube Umbruch auf kleineren Bildschirmen */
+  gap: 20px; /* Abstand zwischen den Tabellen */
 }
 
+/* Tabellenstile */
 .gruppe table {
   width: 100%;
   max-width: 300px; /* Begrenze die Breite der Tabellen */
@@ -57,4 +61,27 @@ section h2 {
   padding: 8px;
   border: 1px solid #000;
   text-align: left;
+}
+
+/* Responsive Stile: Kleinere Schrift auf kleineren Bildschirmen */
+@media screen and (max-width: 768px) {
+  .gruppe table {
+    font-size: 14px; /* Schriftgröße reduzieren */
+  }
+
+  .gruppe td,
+  .gruppe th {
+    padding: 6px; /* Weniger Innenabstand */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .gruppe table {
+    font-size: 12px; /* Noch kleinere Schrift auf sehr kleinen Bildschirmen */
+  }
+
+  .gruppe td,
+  .gruppe th {
+    padding: 4px; /* Noch weniger Innenabstand */
+  }
 }
