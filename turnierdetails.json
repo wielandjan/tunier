@@ -8,16 +8,16 @@
   "ort": "BBZ-Halle in Memmingen",
   "gruppen": {
     "Gruppe A": [
-      "JFG Kronburg 1",
-      "SGM SV Aichstetten",
-      "TSV 1874 Kottern",
-      "SG Tur Abdin/MM-Ost"
+      { "name": "JFG Kronburg 1", "punkte": 0, "tore": 0 },
+      { "name": "SGM SV Aichstetten", "punkte": 0, "tore": 0 },
+      { "name": "TSV 1874 Kottern", "punkte": 0, "tore": 0 },
+      { "name": "SG Tur Abdin/MM-Ost", "punkte": 0, "tore": 0 }
     ],
     "Gruppe B": [
-      "SG Ottobeuren",
-      "TSV Seeg-Hopf.-Eisenb.",
-      "SGM Pfaffenhofen",
-      "JFG Kronburg 2"
+      { "name": "SG Ottobeuren", "punkte": 0, "tore": 0 },
+      { "name": "TSV Seeg-Hopf.-Eisenb.", "punkte": 0, "tore": 0 },
+      { "name": "SGM Pfaffenhofen", "punkte": 0, "tore": 0 },
+      { "name": "JFG Kronburg 2", "punkte": 0, "tore": 0 }
     ]
   }
 }
