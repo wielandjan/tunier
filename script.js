@@ -113,6 +113,20 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
           const gruppeDiv = document.createElement("div");
           gruppeDiv.className = "gruppe";
 
+          // **Sortiere die Teams basierend auf Punkten und Toren**
+          const sortedTeams = [...teams].sort((a, b) => {
+            const teamA = mannschaften[a.name];
+            const teamB = mannschaften[b.name];
+
+            // Zuerst nach Punkten sortieren (absteigend)
+            if (teamB.punkte !== teamA.punkte) {
+              return teamB.punkte - teamA.punkte;
+            }
+
+            // Bei gleicher Punktzahl nach Toren sortieren (absteigend)
+            return teamB.tore - teamA.tore;
+          });
+
           let tabelleHTML = `
             <table>
               <thead>
@@ -126,7 +140,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
               <tbody>
           `;
 
-          teams.forEach((team, index) => {
+          sortedTeams.forEach((team, index) => {
             const stats = mannschaften[team.name];
             tabelleHTML += `
               <tr>
