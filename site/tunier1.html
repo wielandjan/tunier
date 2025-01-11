@@ -1,35 +1,83 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Turnierplan - Dynamisch</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <h1 id="titel"></h1>
-    <p id="untertitel"></p>
-    <p id="datum"></p>
-    <p id="details"></p>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hallenturnier der JFG Kronburg</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Hallenturnier der JFG Kronburg</h1>
+      <p>A - Junioren</p>
+      <p>
+        Am <strong>Samstag</strong>, den <strong>11.01.2025</strong><br />
+        BBZ-Halle in Memmingen
+      </p>
+      <p>
+        Beginn: <strong>14:00</strong> Uhr | Spielzeit:
+        <strong>1 x 10:00</strong> min | Pause: <strong>01:00</strong> min
+      </p>
+    </header>
 
-  <section>
-    <h2>I. Teilnehmende Mannschaften</h2>
-    <div id="gruppen"></div>
-  </section>
-
-  <section>
-    <h2>II. Spielplan Vorrunde</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Nr.</th>
-          <th>Gruppe</th>
-          <th>Beginn</th>
-          <th>Heim</th>
-          <th>Gast</th>
-          <th>Ergebnis</th>
-        </tr>
-      </thead>
-      <tbody id="spiele"
+    <section>
+      <h2>I. Teilnehmende Mannschaften</h2>
+      <div class="gruppen">
+        <div class="gruppe">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="2">Gruppe A</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.</td>
+                <td>JFG Kronburg 1</td>
+              </tr>
+              <tr>
+                <td>2.</td>
+                <td>SGM SV Aichstetten</td>
+              </tr>
+              <tr>
+                <td>3.</td>
+                <td>TSV 1874 Kottern</td>
+              </tr>
+              <tr>
+                <td>4.</td>
+                <td>SG Tur Abdin/MM-Ost</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="gruppe">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="2">Gruppe B</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.</td>
+                <td>SG Ottobeuren</td>
+              </tr>
+              <tr>
+                <td>2.</td>
+                <td>TSV Seeg-Hopf.-Eisenb.</td>
+              </tr>
+              <tr>
+                <td>3.</td>
+                <td>SGM Pfaffenhofen</td>
+              </tr>
+              <tr>
+                <td>4.</td>
+                <td>JFG Kronburg 2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
