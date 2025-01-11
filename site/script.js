@@ -1,5 +1,4 @@
-// JSON-Datei laden und Inhalte dynamisch einfügen
-fetch("../turnierdaten.json")
+fetch("turnierdaten.json?v=1") // Cache-Busting durch Anhängen einer Versionsnummer
   .then((response) => {
     if (!response.ok) {
       throw new Error(`HTTP-Fehler: ${response.status}`);
