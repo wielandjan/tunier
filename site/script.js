@@ -1,38 +1,39 @@
-const datenAuswahl = document.getElementById("daten-auswahl");
-const turnierName = document.getElementById("turnier-name");
-const tableBody = document.querySelector("#turnier-tabelle tbody");
+// JSON-Datei laden
+fetch("turnierdaten.json")
+  .then((response) => response.json())
+  .then((data) => {
+    // Header-Daten einfügen
+    document.getElementById("titel").textContent = data.titel;
+    document.getElementById("untertitel").textContent = data.untertitel;
+    document.getElementById("datum").textContent = `Am ${data.datum}`;
+    document.getElementById(
+      "details"
+    ).textContent = `Beginn: ${data.beginn} | Spielzeit: ${data.spielzeit} | Pause: ${data.pause}`;
 
-// Funktion zum Laden und Anzeigen der Daten
-function ladeTurnierDaten(datei) {
-  fetch(datei)
-    .then((response) => response.json())
-    .then((data) => {
-      turnierName.textContent = data.turnierName;
-      tableBody.innerHTML = ""; // Tabelle leeren
+    // Mannschaften in Gruppen anzeigen
+    const gruppenContainer = document.getElementById("gruppen");
+    for (const [gruppe, teams] of Object.entries(data.gruppen)) {
+      const gruppeDiv = document.createElement("div");
+      gruppeDiv.innerHTML = `
+        <h3>Gruppe ${gruppe}</h3>
+        <ol>${teams.map((team) => `<li>${team}</li>`).join("")}</ol>
+      `;
+      gruppenContainer.appendChild(gruppeDiv);
+    }
 
-      data.spiele.forEach((spiel) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${spiel.nr}</td>
-          <td>${spiel.beginn}</td>
-          <td>${spiel.heim}</td>
-          <td>${spiel.gast}</td>
-          <td>${spiel.ergebnis || "-"}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    })
-    .catch((error) => {
-      console.error("Fehler beim Laden der Daten:", error);
-      tableBody.innerHTML =
-        '<tr><td colspan="5">Daten konnten nicht geladen werden.</td></tr>';
+    // Spielplan einfügen
+    const spieleTabelle = document.getElementById("spiele");
+    data.spiele.forEach((spiel) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${spiel.nr}</td>
+        <td>${spiel.gruppe}</td>
+        <td>${spiel.beginn}</td>
+        <td>${spiel.heim}</td>
+        <td>${spiel.gast}</td>
+        <td>${spiel.ergebnis || "-"}</td>
+      `;
+      spieleTabelle.appendChild(row);
     });
-}
-
-// Standardmäßig erste Datei laden
-ladeTurnierDaten(datenAuswahl.value);
-
-// Eventlistener für Dropdown-Auswahl
-datenAuswahl.addEventListener("change", () => {
-  ladeTurnierDaten(datenAuswahl.value);
-});
+  })
+  .catch((error) => console.error("Fehler beim Laden der Daten:", error));

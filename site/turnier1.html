@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Turnier 1</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h1 id="turnier-name">Turnier 1</h1>
-    <label for="daten-auswahl">Wähle die Turnierdaten:</label>
-    <select id="daten-auswahl">
-      <option value="../data/data_a_bbz.json">Gruppe A (BBZ)</option>
-      <option value="../data/data_b_bbz.json">Gruppe B (BBZ)</option>
-    </select>
-    <table id="turnier-tabelle">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turnierplan - Dynamisch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1 id="titel"></h1>
+    <p id="untertitel"></p>
+    <p id="datum"></p>
+    <p id="details"></p>
+  </header>
+
+  <section>
+    <h2>I. Teilnehmende Mannschaften</h2>
+    <div id="gruppen"></div>
+  </section>
+
+  <section>
+    <h2>II. Spielplan Vorrunde</h2>
+    <table>
       <thead>
         <tr>
           <th>Nr.</th>
+          <th>Gruppe</th>
           <th>Beginn</th>
           <th>Heim</th>
           <th>Gast</th>
           <th>Ergebnis</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Dynamische Inhalte -->
-      </tbody>
-    </table>
-    <script src="script.js"></script>
-  </body>
-</html>
+      <tbody id="spiele"
