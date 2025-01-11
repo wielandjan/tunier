@@ -9,6 +9,8 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
     return response.json();
   })
   .then((data) => {
+    console.log("Turnierdetails geladen:", data); // Debugging: Daten anzeigen
+
     // Header-Daten
     document.getElementById("titel").textContent = data.titel;
     document.getElementById("untertitel").textContent = data.untertitel;
@@ -19,9 +21,6 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       Pause: <strong>${data.pause}</strong> min
     `;
 
-    // Gruppen-Container vorbereiten
-    const gruppenContainer = document.getElementById("gruppen-container");
-
     // Initialisiere Mannschaften mit Punkten und Toren
     const mannschaften = {};
     Object.entries(data.gruppen).forEach(([gruppenName, teams]) => {
@@ -29,6 +28,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
         mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore auf 0
       });
     });
+    console.log("Initialisierte Mannschaften:", mannschaften); // Debugging: Initialisierte Teams
 
     // Spielplan laden und Punkte/Tore berechnen
     fetch("spielplan.json?v=" + new Date().getTime())
@@ -39,17 +39,22 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
         return response.json();
       })
       .then((spielplanData) => {
+        console.log("Spielplan geladen:", spielplanData); // Debugging: Spielplan anzeigen
+
         // Berechne Punkte und Tore basierend auf dem Spielplan
         spielplanData.spielplan.forEach((spiel) => {
+          console.log(`Verarbeite Spiel: ${spiel.heim} vs ${spiel.gast}`); // Debugging: Spielinfo
           if (spiel.ergebnis && spiel.ergebnis.includes(":")) {
             const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
 
+            console.log(
+              `Ergebnis: ${toreHeim} - ${toreGast} (Heim: ${spiel.heim}, Gast: ${spiel.gast})`
+            ); // Debugging: Tore
+
             if (!isNaN(toreHeim) && !isNaN(toreGast)) {
-              // Tore aktualisieren
               mannschaften[spiel.heim].tore += toreHeim;
               mannschaften[spiel.gast].tore += toreGast;
 
-              // Punkte basierend auf dem Ergebnis berechnen
               if (toreHeim > toreGast) {
                 mannschaften[spiel.heim].punkte += 3; // Heimsieg
               } else if (toreHeim < toreGast) {
@@ -58,11 +63,24 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
                 mannschaften[spiel.heim].punkte += 1; // Unentschieden
                 mannschaften[spiel.gast].punkte += 1;
               }
+
+              console.log(
+                `Nach Berechnung: Heim (${spiel.heim}): ${JSON.stringify(
+                  mannschaften[spiel.heim]
+                )}, Gast (${spiel.gast}): ${JSON.stringify(
+                  mannschaften[spiel.gast]
+                )}`
+              ); // Debugging: Aktuelle Werte
+            } else {
+              console.error(`Ungültiges Ergebnis: ${spiel.ergebnis}`); // Debugging: Fehler
             }
           }
         });
 
+        console.log("Endergebnisse der Mannschaften:", mannschaften); // Debugging: Endergebnisse
+
         // Gruppen mit berechneten Punkten und Toren anzeigen
+        const gruppenContainer = document.getElementById("gruppen-container");
         Object.entries(data.gruppen).forEach(([gruppenName, teams]) => {
           const gruppeDiv = document.createElement("div");
           gruppeDiv.className = "gruppe";
