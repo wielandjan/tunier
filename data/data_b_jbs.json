@@ -1,0 +1,26 @@
+{
+  "turnierName": "Gruppe B - Hallenturnier JBS",
+  "spiele": [
+    {
+      "nr": 3,
+      "beginn": "14:22",
+      "heim": "SG Ottobeuren",
+      "gast": "TSV Seeg-Hopf.-Eisenb.",
+      "ergebnis": ""
+    },
+    {
+      "nr": 11,
+      "beginn": "15:06",
+      "heim": "JFG Kronburg 2",
+      "gast": "SG Ottobeuren",
+      "ergebnis": ""
+    },
+    {
+      "nr": 19,
+      "beginn": "15:50",
+      "heim": "SG Ottobeuren",
+      "gast": "SGM Pfaffenhofen",
+      "ergebnis": ""
+    }
+  ]
+}

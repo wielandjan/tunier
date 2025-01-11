@@ -1,0 +1,26 @@
+{
+  "turnierName": "Gruppe A - Hallenturnier BBZ",
+  "spiele": [
+    {
+      "nr": 1,
+      "beginn": "14:00",
+      "heim": "JFG Kronburg 1",
+      "gast": "SGM SV Aichstetten",
+      "ergebnis": ""
+    },
+    {
+      "nr": 9,
+      "beginn": "14:44",
+      "heim": "SG Tur Abdin/MM-Ost",
+      "gast": "JFG Kronburg 1",
+      "ergebnis": ""
+    },
+    {
+      "nr": 17,
+      "beginn": "15:28",
+      "heim": "JFG Kronburg 1",
+      "gast": "TSV 1874 Kottern",
+      "ergebnis": ""
+    }
+  ]
+}
