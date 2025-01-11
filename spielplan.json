@@ -1,0 +1,164 @@
+{
+  "spielplan": [
+    {
+      "nr": 1,
+      "beginn": "14:00",
+      "feld": "A",
+      "heim": "JFG Kronburg 1",
+      "gast": "SGM SV Aichstetten",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 2,
+      "beginn": "14:11",
+      "feld": "A",
+      "heim": "TSV 1874 Kottern",
+      "gast": "SG Tur Abdin/MM-Ost",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 3,
+      "beginn": "14:22",
+      "feld": "B",
+      "heim": "SG Ottobeuren",
+      "gast": "TSV Seeg-Hopf.-Eisenb.",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 4,
+      "beginn": "14:33",
+      "feld": "B",
+      "heim": "SGM Pfaffenhofen",
+      "gast": "JFG Kronburg 2",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 5,
+      "beginn": "14:44",
+      "feld": "A",
+      "heim": "SG Tur Abdin/MM-Ost",
+      "gast": "JFG Kronburg 1",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 6,
+      "beginn": "14:55",
+      "feld": "A",
+      "heim": "SGM SV Aichstetten",
+      "gast": "TSV 1874 Kottern",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 7,
+      "beginn": "15:06",
+      "feld": "B",
+      "heim": "JFG Kronburg 2",
+      "gast": "SG Ottobeuren",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 8,
+      "beginn": "15:17",
+      "feld": "B",
+      "heim": "TSV Seeg-Hopf.-Eisenb.",
+      "gast": "SGM Pfaffenhofen",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 9,
+      "beginn": "15:28",
+      "feld": "A",
+      "heim": "JFG Kronburg 1",
+      "gast": "TSV 1874 Kottern",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 10,
+      "beginn": "15:39",
+      "feld": "A",
+      "heim": "SGM SV Aichstetten",
+      "gast": "SG Tur Abdin/MM-Ost",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 11,
+      "beginn": "15:50",
+      "feld": "B",
+      "heim": "TSV Seeg-Hopf.-Eisenb.",
+      "gast": "JFG Kronburg 2",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 12,
+      "beginn": "16:01",
+      "feld": "B",
+      "heim": "SGM Pfaffenhofen",
+      "gast": "SG Ottobeuren",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 13,
+      "beginn": "16:12",
+      "feld": "A",
+      "heim": "JFG Kronburg 1",
+      "gast": "SGM SV Aichstetten",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 14,
+      "beginn": "16:23",
+      "feld": "A",
+      "heim": "TSV 1874 Kottern",
+      "gast": "SG Tur Abdin/MM-Ost",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 15,
+      "beginn": "16:34",
+      "feld": "B",
+      "heim": "SG Ottobeuren",
+      "gast": "TSV Seeg-Hopf.-Eisenb.",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 16,
+      "beginn": "16:45",
+      "feld": "B",
+      "heim": "SGM Pfaffenhofen",
+      "gast": "JFG Kronburg 2",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 17,
+      "beginn": "16:56",
+      "feld": "A",
+      "heim": "SG Tur Abdin/MM-Ost",
+      "gast": "JFG Kronburg 1",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 18,
+      "beginn": "17:07",
+      "feld": "A",
+      "heim": "SGM SV Aichstetten",
+      "gast": "TSV 1874 Kottern",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 19,
+      "beginn": "17:18",
+      "feld": "B",
+      "heim": "JFG Kronburg 2",
+      "gast": "SG Ottobeuren",
+      "ergebnis": ":"
+    },
+    {
+      "nr": 20,
+      "beginn": "17:29",
+      "feld": "B",
+      "heim": "TSV Seeg-Hopf.-Eisenb.",
+      "gast": "SGM Pfaffenhofen",
+      "ergebnis": ":"
+    }
+  ]
+}
