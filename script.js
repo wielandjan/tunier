@@ -3,21 +3,25 @@ function berechnePunkteUndTore(gruppen, spielplan) {
   const mannschaften = {};
 
   // Initialisiere Punkte und Tore für jede Mannschaft
+  console.log("Initialisiere Mannschaften...");
   Object.values(gruppen)
     .flat()
     .forEach((team) => {
       mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore auf 0
     });
-
-  console.log("Initialisierte Mannschaften:", mannschaften);
+  console.log("Nach Initialisierung:", JSON.stringify(mannschaften));
 
   // Ergebnisse aus dem Spielplan verarbeiten
+  console.log("Starte Verarbeitung der Spielplan-Ergebnisse...");
   spielplan.forEach((spiel) => {
+    console.log(`Verarbeite Spiel: ${JSON.stringify(spiel)}`);
     if (spiel.ergebnis && spiel.ergebnis.includes(":")) {
       // Überprüfe, ob ein gültiges Ergebnis vorliegt
       const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
 
       if (!isNaN(toreHeim) && !isNaN(toreGast)) {
+        console.log(`Valide Tore: Heim (${toreHeim}), Gast (${toreGast})`);
+
         // Tore aktualisieren
         mannschaften[spiel.heim].tore += toreHeim;
         mannschaften[spiel.gast].tore += toreGast;
@@ -31,11 +35,18 @@ function berechnePunkteUndTore(gruppen, spielplan) {
           mannschaften[spiel.heim].punkte += 1; // Unentschieden
           mannschaften[spiel.gast].punkte += 1;
         }
+        console.log(
+          `Nach Berechnung: Heim (${spiel.heim}): ${JSON.stringify(
+            mannschaften[spiel.heim]
+          )}, Gast (${spiel.gast}): ${JSON.stringify(mannschaften[spiel.gast])}`
+        );
       }
+    } else {
+      console.log("Kein gültiges Ergebnis gefunden. Überspringe Spiel.");
     }
   });
 
-  console.log("Berechnete Punkte und Tore:", mannschaften);
+  console.log("Endergebnis nach Berechnung:", JSON.stringify(mannschaften));
   return mannschaften;
 }
 
@@ -46,6 +57,9 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
     fetch("spielplan.json?v=" + new Date().getTime())
       .then((response) => response.json())
       .then((spielplanData) => {
+        console.log("Geladene Turnierdetails:", JSON.stringify(data));
+        console.log("Geladener Spielplan:", JSON.stringify(spielplanData));
+
         const punkteUndTore = berechnePunkteUndTore(
           data.gruppen,
           spielplanData.spielplan
