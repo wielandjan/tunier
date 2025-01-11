@@ -518,11 +518,11 @@ function handleEndrundeRendering(endrundeSpiele, mannschaften, spielplan) {
     renderEndrunde(endrundeSpiele);
 
     // Sichtbarkeit der Endrunde freigeben und Hinweis verstecken
-    endrundeSection.classList.remove("hidden");
-    endrundeHinweis.classList.add("hidden");
-  } else {
-    // Endrunde verbergen und Hinweis anzeigen
     endrundeSection.classList.add("hidden");
     endrundeHinweis.classList.remove("hidden");
+  } else {
+    // Endrunde verbergen und Hinweis anzeigen
+    endrundeSection.classList.remove("hidden");
+    endrundeHinweis.classList.add("hidden");
   }
 }
