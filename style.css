@@ -17,8 +17,9 @@ header h1 {
 }
 
 header p {
-  font-size: 1.1em; /* Standard-Schriftgröße für Details */
-  margin: 5px 0;
+  font-size: 1.1em; /* Einheitliche Schriftgröße */
+  margin: 5px 0; /* Kein übermäßiger Abstand */
+  white-space: nowrap; /* Verhindert Umbrüche innerhalb der Zeile */
 }
 
 header p strong {
