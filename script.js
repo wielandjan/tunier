@@ -1,6 +1,13 @@
-// Lade die Turnierdetails
+// Turnierdetails laden
 fetch("turnierdetails.json?v=" + new Date().getTime())
-  .then((response) => response.json())
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(
+        `HTTP-Fehler bei turnierdetails.json: ${response.status}`
+      );
+    }
+    return response.json();
+  })
   .then((data) => {
     // Header-Daten
     document.getElementById("titel").textContent = data.titel;
@@ -12,7 +19,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       Pause: <strong>${data.pause}</strong> min
     `;
 
-    // Gruppen anzeigen
+    // Gruppen erstellen
     const gruppenContainer = document.getElementById("gruppen-container");
     Object.entries(data.gruppen).forEach(([gruppenName, mannschaften]) => {
       const gruppeDiv = document.createElement("div");
@@ -22,10 +29,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
         <table>
           <thead>
             <tr>
-              <th>Nr.</th>
-              <th>Name</th>
-              <th>Punkte</th>
-              <th>Tore</th>
+              <th colspan="2">${gruppenName}</th>
             </tr>
           </thead>
           <tbody>
@@ -35,9 +39,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
         tabelleHTML += `
           <tr>
             <td>${index + 1}.</td>
-            <td>${team.name}</td>
-            <td>${team.punkte}</td>
-            <td>${team.tore}</td>
+            <td>${team}</td>
           </tr>
         `;
       });
@@ -55,10 +57,15 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
     console.error("Fehler beim Laden der Turnierdetails:", error)
   );
 
-// Lade den Spielplan
+// Spielplan laden
 fetch("spielplan.json?v=" + new Date().getTime())
-  .then((response) => response.json())
-  .then((spielplanData) => {
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler bei spielplan.json: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then((data) => {
     const spielplanContainer = document.getElementById("spielplan-container");
     let spielplanHTML = `
       <table>
@@ -75,7 +82,7 @@ fetch("spielplan.json?v=" + new Date().getTime())
         <tbody>
     `;
 
-    spielplanData.spielplan.forEach((spiel) => {
+    data.spielplan.forEach((spiel) => {
       spielplanHTML += `
         <tr>
           <td>${spiel.nr}</td>
@@ -92,6 +99,7 @@ fetch("spielplan.json?v=" + new Date().getTime())
         </tbody>
       </table>
     `;
+
     spielplanContainer.innerHTML = spielplanHTML;
   })
   .catch((error) => console.error("Fehler beim Laden des Spielplans:", error));

@@ -7,21 +7,21 @@ body {
 }
 
 header {
-  display: flex; /* Nutze Flexbox für präzise Zentrierung */
-  flex-direction: column; /* Elemente untereinander anordnen */
-  align-items: center; /* Zentriere horizontal */
-  justify-content: center; /* Zentriere vertikal */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 30px;
 }
 
 header h1 {
-  font-size: 2em; /* Große Schrift für den Titel */
+  font-size: 1.5em; /* Kleinere Schriftgröße für den Titel */
   margin-bottom: 10px;
 }
 
 header p {
-  font-size: 1.1em; /* Einheitliche Schriftgröße */
-  margin: 5px 0; /* Kein übermäßiger Abstand */
+  font-size: 1em; /* Einheitliche Schriftgröße für Details */
+  margin: 5px 0;
 }
 
 header p strong {
@@ -29,9 +29,9 @@ header p strong {
 }
 
 #details {
-  display: inline-block; /* Macht die Details zu einem Block */
-  text-align: center; /* Zentriere den Text innerhalb des Blocks */
-  white-space: nowrap; /* Verhindert Umbrüche innerhalb der Zeile */
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
 }
 
 section {
@@ -39,7 +39,7 @@ section {
 }
 
 section h2 {
-  font-size: 1.5em; /* Überschrift für die Gruppen */
+  font-size: 1.3em; /* Kleinere Schriftgröße für die Gruppenüberschrift */
   margin-bottom: 15px;
 }
 
@@ -47,70 +47,72 @@ section h2 {
 .gruppen {
   display: flex;
   justify-content: center; /* Zentriere die Tabellen horizontal */
-  flex-wrap: wrap; /* Erlaube Umbruch auf kleineren Bildschirmen */
-  gap: 20px; /* Abstand zwischen den Tabellen */
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 /* Tabellenstile */
-.gruppe table {
+.gruppe table,
+.spielplan table {
   width: 100%;
-  max-width: 300px; /* Begrenze die Breite der Tabellen */
-  border-collapse: collapse;
-  text-align: left;
-  border: 1px solid #000;
+  max-width: 600px; /* Größere Tabellenbreite */
+  margin: 0 auto; /* Zentriere die Tabellen */
+  border-collapse: collapse; /* Entfernt doppelte Ränder */
+  border: 1px solid #000; /* Äußere Begrenzung */
 }
 
-.gruppe th {
+.gruppe th,
+.spielplan th {
   background-color: #ccc;
   text-align: center;
   padding: 8px;
+  border: 1px solid #000; /* Begrenzung der Kopfzellen */
 }
 
-.gruppe td {
+.gruppe td,
+.spielplan td {
   padding: 8px;
-  border: 1px solid #000;
-  text-align: left;
+  text-align: center;
+  border: 1px solid #000; /* Begrenzung der Datenzellen */
 }
 
 /* Responsive Stile: Kleinere Schrift auf kleineren Bildschirmen */
 @media screen and (max-width: 768px) {
-  /* Kopfbereich */
   header h1 {
-    font-size: 1.5em; /* Verkleinere den Titel */
+    font-size: 1.2em; /* Verkleinere den Titel */
   }
 
   header p {
-    font-size: 1em; /* Verkleinere die Details */
+    font-size: 0.9em; /* Verkleinere die Details */
   }
 
-  /* Tabellen */
-  .gruppe table {
+  .gruppe table,
+  .spielplan table {
     font-size: 14px; /* Reduziere die Schriftgröße in den Tabellen */
   }
 
   .gruppe td,
-  .gruppe th {
+  .spielplan td {
     padding: 6px; /* Weniger Innenabstand */
   }
 }
 
 @media screen and (max-width: 480px) {
-  /* Kopfbereich */
   header h1 {
-    font-size: 1.2em; /* Noch kleinere Schrift für den Titel */
+    font-size: 1em; /* Noch kleinere Schrift für den Titel */
   }
 
   header p {
-    font-size: 0.9em; /* Verkleinere die Details noch weiter */
+    font-size: 0.8em; /* Noch kleinere Schrift für die Details */
   }
 
-  /* Tabellen */
-  .gruppe table {
+  .gruppe table,
+  .spielplan table {
     font-size: 12px; /* Noch kleinere Schrift in den Tabellen */
   }
 
   .gruppe td,
-  .gruppe th {
+  .spielplan td {
     padding: 4px; /* Noch weniger Innenabstand */
   }
 }
