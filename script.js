@@ -22,7 +22,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
     `;
 
     // Initialisiere Mannschaften
-    const mannschaften = {}; // Variable muss hier deklariert werden
+    const mannschaften = {}; // Eindeutige Deklaration
 
     console.log("Mannschaften vor Initialisierung:", mannschaften);
 
@@ -30,13 +30,14 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       teams.forEach((team) => {
         if (!mannschaften[team.name]) {
           console.log(`Initialisiere ${team.name} mit 0 Punkten und Toren.`);
+          mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore
+          console.log(`Setze ${team.name} auf`, mannschaften[team.name]);
         } else {
           console.error(
             `${team.name} war bereits initialisiert:`,
             mannschaften[team.name]
           );
         }
-        mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore
       });
     });
 
@@ -56,7 +57,13 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
         // Berechne Punkte und Tore basierend auf dem Spielplan
         spielplanData.spielplan.forEach((spiel) => {
           console.log(`Verarbeite Spiel: ${spiel.heim} vs ${spiel.gast}`); // Debugging: Spielinfo
-          if (spiel.ergebnis && spiel.ergebnis.includes(":")) {
+
+          // Überprüfe, ob das Ergebnis gültig ist und nicht nur ":"
+          if (
+            spiel.ergebnis &&
+            spiel.ergebnis.includes(":") &&
+            spiel.ergebnis.trim() !== ":"
+          ) {
             const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
 
             console.log(
@@ -69,11 +76,16 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
 
               if (toreHeim > toreGast) {
                 mannschaften[spiel.heim].punkte += 3; // Heimsieg
+                console.log(`${spiel.heim} gewinnt und erhält 3 Punkte.`);
               } else if (toreHeim < toreGast) {
                 mannschaften[spiel.gast].punkte += 3; // Gastsieg
+                console.log(`${spiel.gast} gewinnt und erhält 3 Punkte.`);
               } else {
                 mannschaften[spiel.heim].punkte += 1; // Unentschieden
                 mannschaften[spiel.gast].punkte += 1;
+                console.log(
+                  `Unentschieden zwischen ${spiel.heim} und ${spiel.gast}. Beide erhalten 1 Punkt.`
+                );
               }
 
               console.log(
@@ -86,6 +98,10 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
             } else {
               console.error(`Ungültiges Ergebnis: ${spiel.ergebnis}`); // Debugging: Fehler
             }
+          } else {
+            console.log(
+              `Spiel ${spiel.nr} hat noch kein Ergebnis und wird übersprungen.`
+            );
           }
         });
 
