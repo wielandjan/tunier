@@ -2,6 +2,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 20px;
   line-height: 1.6;
+  text-align: center; /* Zentriere den gesamten Text */
 }
 
 header {
@@ -34,12 +35,13 @@ section h2 {
 
 .gruppen {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Zentriere die Gruppen horizontal */
   gap: 20px;
 }
 
 .gruppe table {
   width: 100%;
+  max-width: 300px; /* Begrenze die Breite der Tabellen */
   border-collapse: collapse;
   text-align: left;
   border: 1px solid #000;
@@ -54,4 +56,5 @@ section h2 {
 .gruppe td {
   padding: 8px;
   border: 1px solid #000;
+  text-align: left;
 }
