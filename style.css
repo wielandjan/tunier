@@ -12,12 +12,12 @@ header {
 }
 
 header h1 {
-  font-size: 2em;
+  font-size: 2em; /* Große Schrift für den Titel */
   margin-bottom: 10px;
 }
 
 header p {
-  font-size: 1.1em;
+  font-size: 1.1em; /* Standard-Schriftgröße für Details */
   margin: 5px 0;
 }
 
@@ -30,7 +30,7 @@ section {
 }
 
 section h2 {
-  font-size: 1.5em;
+  font-size: 1.5em; /* Überschrift für die Gruppen */
   margin-bottom: 15px;
 }
 
@@ -65,8 +65,18 @@ section h2 {
 
 /* Responsive Stile: Kleinere Schrift auf kleineren Bildschirmen */
 @media screen and (max-width: 768px) {
+  /* Kopfbereich */
+  header h1 {
+    font-size: 1.5em; /* Verkleinere den Titel */
+  }
+
+  header p {
+    font-size: 1em; /* Verkleinere die Details */
+  }
+
+  /* Tabellen */
   .gruppe table {
-    font-size: 14px; /* Schriftgröße reduzieren */
+    font-size: 14px; /* Reduziere die Schriftgröße in den Tabellen */
   }
 
   .gruppe td,
@@ -76,8 +86,18 @@ section h2 {
 }
 
 @media screen and (max-width: 480px) {
+  /* Kopfbereich */
+  header h1 {
+    font-size: 1.2em; /* Noch kleinere Schrift für den Titel */
+  }
+
+  header p {
+    font-size: 0.9em; /* Verkleinere die Details noch weiter */
+  }
+
+  /* Tabellen */
   .gruppe table {
-    font-size: 12px; /* Noch kleinere Schrift auf sehr kleinen Bildschirmen */
+    font-size: 12px; /* Noch kleinere Schrift in den Tabellen */
   }
 
   .gruppe td,
