@@ -1,18 +1,98 @@
-// Funktionen zur Modularisierung
+// script.js
+
+// Hauptfunktion, die alle Operationen koordiniert
+(async function TournamentApp() {
+  try {
+    // Daten laden
+    const [detailsData, spielplanData, endrundeData] = await loadAllData();
+
+    // Header aktualisieren
+    updateHeader(detailsData);
+
+    // Mannschaften initialisieren
+    const mannschaften = initializeTeams(detailsData.gruppen);
+
+    // Ergebnisse berechnen
+    calculateResults(spielplanData.spielplan, mannschaften);
+
+    // Gruppentabellen rendern
+    renderGroupTables(
+      detailsData.gruppen,
+      mannschaften,
+      spielplanData.spielplan
+    );
+
+    // Spielplan rendern
+    renderSpielplan(spielplanData.spielplan);
+
+    // Bedingtes Rendern der Endrunde
+    handleEndrundeRendering(
+      endrundeData.endrunde.spiele,
+      mannschaften,
+      spielplanData.spielplan
+    );
+  } catch (error) {
+    console.error("Fehler beim Laden der Daten:", error);
+  }
+})();
+
+/**
+ * Lädt alle notwendigen JSON-Daten parallel.
+ * @returns {Promise<Array>} - Array mit den geladenen JSON-Daten.
+ */
+async function loadAllData() {
+  const responses = await Promise.all([
+    fetch("turnierdetails.json?v=" + new Date().getTime()),
+    fetch("spielplan.json?v=" + new Date().getTime()),
+    fetch("endrunde.json?v=" + new Date().getTime()),
+  ]);
+
+  // Überprüfen, ob alle Anfragen erfolgreich waren
+  responses.forEach((response, index) => {
+    if (!response.ok) {
+      const fileNames = [
+        "turnierdetails.json",
+        "spielplan.json",
+        "endrunde.json",
+      ];
+      throw new Error(
+        `HTTP-Fehler bei ${fileNames[index]}: ${response.status}`
+      );
+    }
+  });
+
+  // JSON-Daten parsen
+  return Promise.all(responses.map((response) => response.json()));
+}
+
+/**
+ * Aktualisiert die Header-Daten im HTML-Dokument.
+ * @param {Object} detailsData - Die Daten aus turnierdetails.json.
+ */
+function updateHeader(detailsData) {
+  document.getElementById("titel").textContent = detailsData.titel;
+  document.getElementById("untertitel").textContent = detailsData.untertitel;
+  document.getElementById("datum").textContent = `Am ${detailsData.datum}`;
+  document.getElementById("details").innerHTML = `
+    Beginn: <strong>${detailsData.beginn}</strong> Uhr |
+    Spielzeit: <strong>${detailsData.spielzeit}</strong> min |
+    Pause: <strong>${detailsData.pause}</strong> min
+  `;
+}
 
 /**
  * Initialisiert die Mannschaften mit 0 Punkten und 0 Toren.
  * @param {Object} gruppen - Die Gruppen aus den Turnierdetails.
- * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
+ * @returns {Object} - Objekt mit Mannschaftsdaten.
  */
-function initializeTeams(gruppen, mannschaften) {
-  Object.entries(gruppen).forEach(([gruppenName, teams]) => {
-    teams.forEach((team) => {
-      if (!mannschaften[team.name]) {
-        mannschaften[team.name] = { punkte: 0, tore: 0 };
-      }
+function initializeTeams(gruppen) {
+  const mannschaften = {};
+  Object.values(gruppen)
+    .flat()
+    .forEach((team) => {
+      mannschaften[team.name] = { punkte: 0, tore: 0 };
     });
-  });
+  return mannschaften;
 }
 
 /**
@@ -22,25 +102,56 @@ function initializeTeams(gruppen, mannschaften) {
  */
 function calculateResults(spielplan, mannschaften) {
   spielplan.forEach((spiel) => {
+    // Prüfen, ob das Spiel abgeschlossen ist
     if (
       spiel.ergebnis &&
       spiel.ergebnis.includes(":") &&
       spiel.ergebnis.trim() !== ":"
     ) {
-      const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
+      let [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
+      let extraPunkteHeim = 0;
+      let extraPunkteGast = 0;
 
-      if (!isNaN(toreHeim) && !isNaN(toreGast)) {
-        mannschaften[spiel.heim].tore += toreHeim;
-        mannschaften[spiel.gast].tore += toreGast;
-
-        if (toreHeim > toreGast) {
-          mannschaften[spiel.heim].punkte += 3; // Heimsieg
-        } else if (toreHeim < toreGast) {
-          mannschaften[spiel.gast].punkte += 3; // Gastsieg
-        } else {
-          mannschaften[spiel.heim].punkte += 1; // Unentschieden
-          mannschaften[spiel.gast].punkte += 1;
+      // Prüfen auf Verlängerung oder Elfmeterschießen bei Unentschieden
+      if (toreHeim === toreGast) {
+        if (
+          spiel.ergebnisVerlaengerung &&
+          spiel.ergebnisVerlaengerung.includes(":")
+        ) {
+          const [toreHeimExt, toreGastExt] = spiel.ergebnisVerlaengerung
+            .split(":")
+            .map(Number);
+          toreHeim += toreHeimExt;
+          toreGast += toreGastExt;
+          if (toreHeimExt > toreGastExt) extraPunkteHeim += 1;
+          else if (toreHeimExt < toreGastExt) extraPunkteGast += 1;
         }
+        if (
+          spiel.ergebnisElfmeterschießen &&
+          spiel.ergebnisElfmeterschießen.includes(":")
+        ) {
+          const [toreHeimSho, toreGastSho] = spiel.ergebnisElfmeterschießen
+            .split(":")
+            .map(Number);
+          toreHeim += toreHeimSho;
+          toreGast += toreGastSho;
+          if (toreHeimSho > toreGastSho) extraPunkteHeim += 1;
+          else if (toreHeimSho < toreGastSho) extraPunkteGast += 1;
+        }
+      }
+
+      // Tore addieren
+      mannschaften[spiel.heim].tore += toreHeim;
+      mannschaften[spiel.gast].tore += toreGast;
+
+      // Punkte berechnen
+      if (toreHeim > toreGast) {
+        mannschaften[spiel.heim].punkte += 3 + extraPunkteHeim;
+      } else if (toreHeim < toreGast) {
+        mannschaften[spiel.gast].punkte += 3 + extraPunkteGast;
+      } else {
+        mannschaften[spiel.heim].punkte += 1;
+        mannschaften[spiel.gast].punkte += 1;
       }
     }
   });
@@ -58,7 +169,7 @@ function sortTeams(teams, mannschaften, spielplan) {
     const teamA = mannschaften[a.name];
     const teamB = mannschaften[b.name];
 
-    // Zuerst nach Punkten sortieren (absteigend)
+    // Nach Punkten sortieren (absteigend)
     if (teamB.punkte !== teamA.punkte) {
       return teamB.punkte - teamA.punkte;
     }
@@ -91,20 +202,20 @@ function sortTeams(teams, mannschaften, spielplan) {
       }
     }
 
-    // Wenn immer noch gleich, Platzhalter oder zufällige Reihenfolge
-    return 0;
+    // Alphabetisch sortieren als letztes Kriterium
+    return a.name.localeCompare(b.name);
   });
 }
 
 /**
- * Rendert die Gruppen-Tabellen.
+ * Rendert die Gruppen-Tabellen im HTML-Dokument.
  * @param {Object} gruppen - Die Gruppen aus den Turnierdetails.
  * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
- * @param {Array} spielplan - Das Array der Spiele, um direkte Vergleiche zu ermöglichen.
+ * @param {Array} spielplan - Das Array der Spiele.
  */
 function renderGroupTables(gruppen, mannschaften, spielplan) {
   const gruppenContainer = document.getElementById("gruppen-container");
-  gruppenContainer.innerHTML = ""; // Leeren Sie den Container vor dem Rendern
+  gruppenContainer.innerHTML = ""; // Container leeren
 
   Object.entries(gruppen).forEach(([gruppenName, teams]) => {
     const gruppeDiv = document.createElement("div");
@@ -113,6 +224,7 @@ function renderGroupTables(gruppen, mannschaften, spielplan) {
     const sortedTeams = sortTeams(teams, mannschaften, spielplan);
 
     let tabelleHTML = `
+      <h3>${gruppenName}</h3>
       <table>
         <thead>
           <tr>
@@ -148,7 +260,7 @@ function renderGroupTables(gruppen, mannschaften, spielplan) {
 }
 
 /**
- * Rendert den Spielplan.
+ * Rendert den Spielplan im HTML-Dokument.
  * @param {Array} spielplan - Das Array der Spiele.
  */
 function renderSpielplan(spielplan) {
@@ -190,15 +302,24 @@ function renderSpielplan(spielplan) {
 }
 
 /**
- * Rendert die Endrunde.
- * @param {Object} endrunde - Die Endrunde aus der Endrunde-JSON.
+ * Rendert die Endrunde im HTML-Dokument.
+ * @param {Array} endrundeSpiele - Das Array der Endrunde-Spiele.
  */
-function renderEndrunde(endrunde) {
+function renderEndrunde(endrundeSpiele) {
   const endrundeContainer = document.getElementById("endrunde-container");
-  const { spiele, beginn, spielzeit, pause } = endrunde;
+
+  if (endrundeSpiele.length === 0) {
+    endrundeContainer.innerHTML = "<p>Keine Endrunde verfügbar.</p>";
+    return;
+  }
+
+  // Annahme: Alle Spiele haben die gleichen Spielzeit und Pause (optional anpassen)
+  const firstSpiel = endrundeSpiele[0];
 
   let endrundeHTML = `
-    <p>Beginn: ${beginn} Uhr | Spielzeit: ${spielzeit} min | Pause: ${pause} min</p>
+    <p>Beginn: ${firstSpiel.beginn} Uhr | Spielzeit: ${
+    firstSpiel.spielzeit || "1 x 10:00"
+  } min | Pause: ${firstSpiel.pause || "01:00"} min</p>
     <table>
       <thead>
         <tr>
@@ -213,7 +334,7 @@ function renderEndrunde(endrunde) {
       <tbody>
   `;
 
-  spiele.forEach((spiel) => {
+  endrundeSpiele.forEach((spiel) => {
     endrundeHTML += `
       <tr>
         <td>${spiel.nr}</td>
@@ -234,65 +355,148 @@ function renderEndrunde(endrunde) {
   endrundeContainer.innerHTML = endrundeHTML;
 }
 
-// Hauptlogik
-Promise.all([
-  fetch("turnierdetails.json?v=" + new Date().getTime()),
-  fetch("spielplan.json?v=" + new Date().getTime()),
-  fetch("endrunde.json?v=" + new Date().getTime()),
-])
-  .then(async ([detailsResponse, spielplanResponse, endrundeResponse]) => {
-    if (!detailsResponse.ok) {
-      throw new Error(
-        `HTTP-Fehler bei turnierdetails.json: ${detailsResponse.status}`
-      );
+/**
+ * Aktualisiert die Endrunde-Teams basierend auf den Ergebnissen der Halbfinale.
+ * @param {Array} endrundeSpiele - Das Array der Endrunde-Spiele.
+ * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
+ * @param {Array} spielplan - Das Array der Spiele, um direkte Vergleiche zu ermöglichen.
+ */
+function updateEndrunde(endrundeSpiele, mannschaften, spielplan) {
+  // Halbfinale finden
+  const halbfinale1 = spielplan.find((spiel) => spiel.nr === 21);
+  const halbfinale2 = spielplan.find((spiel) => spiel.nr === 22);
+
+  const siegerHalbfinale1 = getSieger(halbfinale1, mannschaften);
+  const siegerHalbfinale2 = getSieger(halbfinale2, mannschaften);
+
+  const verliererHalbfinale1 = getVerlierer(halbfinale1, mannschaften);
+  const verliererHalbfinale2 = getVerlierer(halbfinale2, mannschaften);
+
+  // Sieger Halbfinale I -> Heim des Endspiels (Nr. 26)
+  const endspiel = endrundeSpiele.find((spiel) => spiel.nr === 26);
+  if (endspiel && siegerHalbfinale1) {
+    endspiel.heim = siegerHalbfinale1;
+  }
+
+  // Sieger Halbfinale II -> Gast des Endspiels (Nr. 26)
+  if (endspiel && siegerHalbfinale2) {
+    endspiel.gast = siegerHalbfinale2;
+  }
+
+  // Verlierer Halbfinale I und II -> Heim und Gast des Spiels um Platz 3 und 4 (Nr. 25)
+  const spielUmPlatz3und4 = endrundeSpiele.find((spiel) => spiel.nr === 25);
+  if (spielUmPlatz3und4) {
+    if (verliererHalbfinale1) {
+      spielUmPlatz3und4.heim = verliererHalbfinale1;
     }
-    if (!spielplanResponse.ok) {
-      throw new Error(
-        `HTTP-Fehler bei spielplan.json: ${spielplanResponse.status}`
-      );
+    if (verliererHalbfinale2) {
+      spielUmPlatz3und4.gast = verliererHalbfinale2;
     }
-    if (!endrundeResponse.ok) {
-      throw new Error(
-        `HTTP-Fehler bei endrunde.json: ${endrundeResponse.status}`
-      );
+  }
+
+  // Weitere Spiele um Platz 5 und 6 sowie 7 und 8 können hier ebenfalls aktualisiert werden
+}
+
+/**
+ * Bestimmt den Sieger eines Spiels.
+ * @param {Object} spiel - Das Spielobjekt.
+ * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
+ * @returns {String|null} - Der Name des Siegers oder null bei Unentschieden.
+ */
+function getSieger(spiel, mannschaften) {
+  if (
+    spiel.ergebnis &&
+    spiel.ergebnis.includes(":") &&
+    spiel.ergebnis.trim() !== ":"
+  ) {
+    const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
+    if (toreHeim > toreGast) {
+      return spiel.heim;
+    } else if (toreHeim < toreGast) {
+      return spiel.gast;
     }
+  }
+  return null; // Kein Sieger (Unentschieden oder Spiel noch nicht gespielt)
+}
 
-    const [detailsData, spielplanData, endrundeData] = await Promise.all([
-      detailsResponse.json(),
-      spielplanResponse.json(),
-      endrundeResponse.json(),
-    ]);
+/**
+ * Bestimmt den Verlierer eines Spiels.
+ * @param {Object} spiel - Das Spielobjekt.
+ * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
+ * @returns {String|null} - Der Name des Verlierers oder null bei Unentschieden.
+ */
+function getVerlierer(spiel, mannschaften) {
+  if (
+    spiel.ergebnis &&
+    spiel.ergebnis.includes(":") &&
+    spiel.ergebnis.trim() !== ":"
+  ) {
+    const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
+    if (toreHeim > toreGast) {
+      return spiel.gast;
+    } else if (toreHeim < toreGast) {
+      return spiel.heim;
+    }
+  }
+  return null; // Kein Verlierer (Unentschieden oder Spiel noch nicht gespielt)
+}
 
-    // Header-Daten aktualisieren
-    document.getElementById("titel").textContent = detailsData.titel;
-    document.getElementById("untertitel").textContent = detailsData.untertitel;
-    document.getElementById("datum").textContent = `Am ${detailsData.datum}`;
-    document.getElementById("details").innerHTML = `
-      Beginn: <strong>${detailsData.beginn}</strong> Uhr |
-      Spielzeit: <strong>${detailsData.spielzeit}</strong> min |
-      Pause: <strong>${detailsData.pause}</strong> min
-    `;
+/**
+ * Überprüft, ob alle Gruppenspiele abgeschlossen sind.
+ * @param {Object} gruppen - Die Gruppen aus den Turnierdetails.
+ * @param {Array} spielplan - Das Array der Spiele.
+ * @returns {Boolean} - True, wenn alle Gruppenspiele abgeschlossen sind, sonst False.
+ */
+function areAllGroupGamesFinished(gruppen, spielplan) {
+  // Gruppenspiele identifizieren (angenommen: Nr. <= 20)
+  const groupGames = spielplan.filter((spiel) => spiel.nr <= 20);
+  return groupGames.every(
+    (spiel) =>
+      spiel.ergebnis &&
+      spiel.ergebnis.trim() !== ":" &&
+      spiel.ergebnis.includes(":")
+  );
+}
 
-    // Mannschaften initialisieren
-    const mannschaften = {};
-    initializeTeams(detailsData.gruppen, mannschaften);
+/**
+ * Überprüft, ob alle Halbfinalspiele abgeschlossen sind.
+ * @param {Array} spielplan - Das Array der Spiele.
+ * @returns {Boolean} - True, wenn alle Halbfinalspiele abgeschlossen sind, sonst False.
+ */
+function areAllSemifinalGamesFinished(spielplan) {
+  const semifinalGames = spielplan.filter(
+    (spiel) => spiel.nr === 21 || spiel.nr === 22
+  );
+  return semifinalGames.every(
+    (spiel) =>
+      spiel.ergebnis &&
+      spiel.ergebnis.trim() !== ":" &&
+      spiel.ergebnis.includes(":")
+  );
+}
 
-    // Ergebnisse berechnen
-    calculateResults(spielplanData.spielplan, mannschaften);
+/**
+ * Rendert die Endrunde bedingt und zeigt den Abschnitt an, wenn alle Gruppenspiele abgeschlossen sind.
+ * @param {Array} endrundeSpiele - Das Array der Endrunde-Spiele.
+ * @param {Object} mannschaften - Das Objekt, das die Mannschaften speichert.
+ * @param {Array} spielplan - Das Array der Spiele.
+ */
+function handleEndrundeRendering(endrundeSpiele, mannschaften, spielplan) {
+  const endrundeSection = document.getElementById("endrunde-section");
 
-    // Sortierte Tabellen rendern
-    renderGroupTables(
-      detailsData.gruppen,
-      mannschaften,
-      spielplanData.spielplan
-    );
-
-    // Spielplan rendern
-    renderSpielplan(spielplanData.spielplan);
+  if (areAllGroupGamesFinished(mannschaften.gruppen, spielplan)) {
+    // Endrunde-Teams aktualisieren
+    updateEndrunde(endrundeSpiele, mannschaften, spielplan);
 
     // Endrunde rendern
-    renderEndrunde(endrundeData.endrunde);
-  })
-  .catch((error) => {
-    console.error("Fehler beim Laden der Daten:", error);
-  });
+    renderEndrunde(endrundeSpiele);
+
+    // Sichtbarkeit der Endrunde freigeben
+    endrundeSection.classList.remove("hidden");
+
+    // Optional: Weitere Überprüfungen oder Hervorhebungen durchführen
+  } else {
+    // Endrunde verbergen, wenn nicht alle Gruppenspiele abgeschlossen sind
+    endrundeSection.classList.add("hidden");
+  }
+}

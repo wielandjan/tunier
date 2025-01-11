@@ -116,12 +116,32 @@ section h2 {
     padding: 4px; /* Noch weniger Innenabstand */
   }
 
-  /* Endrunde-Tabellenstile */
+  /* Versteckt Elemente */
+  .hidden {
+    display: none;
+  }
+
+  /* Bestehende Tabellenstile für die Endrunde */
   .endrunde table {
-    background-color: #f9f9f9;
+    width: 100%;
+    max-width: 800px; /* Größere Tabellenbreite für die Endrunde */
+    margin: 0 auto; /* Zentriere die Tabelle */
+    border-collapse: collapse; /* Entfernt doppelte Ränder */
+    border: 2px solid #000; /* Äußere Begrenzung */
+  }
+
+  .endrunde th,
+  .endrunde td {
+    background-color: #e2e2e2; /* Leicht grauer Hintergrund für bessere Lesbarkeit */
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #000; /* Begrenzung der Zellen */
   }
 
   .endrunde th {
-    background-color: #e2e2e2;
+    background-color: #d4d4d4; /* Dunklerer Grauton für den Kopfbereich */
+    font-weight: bold;
   }
+
+  /* Optional: Ähnliche Anpassungen für andere Tabellen */
 }
