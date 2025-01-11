@@ -1,56 +1,23 @@
 {
   "titel": "Hallenturnier der JFG Kronburg",
-  "untertitel": "A-Junioren",
+  "untertitel": "A - Junioren",
   "datum": "11.01.2025",
   "beginn": "14:00 Uhr",
   "spielzeit": "1 x 10:00 min",
-  "pause": "1:00 min",
+  "pause": "01:00 min",
+  "ort": "BBZ-Halle in Memmingen",
   "gruppen": {
-    "A": [
+    "Gruppe A": [
       "JFG Kronburg 1",
       "SGM SV Aichstetten",
       "TSV 1874 Kottern",
       "SG Tur Abdin/MM-Ost"
     ],
-    "B": [
+    "Gruppe B": [
       "SG Ottobeuren",
       "TSV Seeg-Hopf.-Eisenb.",
       "SGM Pfaffenhofen",
       "JFG Kronburg 2"
     ]
-  },
-  "spiele": [
-    {
-      "nr": 1,
-      "gruppe": "A",
-      "beginn": "14:00",
-      "heim": "JFG Kronburg 1",
-      "gast": "SGM SV Aichstetten",
-      "ergebnis": ""
-    },
-    {
-      "nr": 2,
-      "gruppe": "A",
-      "beginn": "14:11",
-      "heim": "TSV 1874 Kottern",
-      "gast": "SG Tur Abdin/MM-Ost",
-      "ergebnis": ""
-    },
-    {
-      "nr": 3,
-      "gruppe": "B",
-      "beginn": "14:22",
-      "heim": "SG Ottobeuren",
-      "gast": "TSV Seeg-Hopf.-Eisenb.",
-      "ergebnis": ""
-    },
-    {
-      "nr": 4,
-      "gruppe": "B",
-      "beginn": "14:33",
-      "heim": "SGM Pfaffenhofen",
-      "gast": "JFG Kronburg 2",
-      "ergebnis": ""
-    }
-  ]
+  }
 }
