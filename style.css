@@ -52,28 +52,56 @@ section h2 {
 }
 
 /* Tabellenstile */
-.gruppe table,
-.spielplan table {
+table {
   width: 100%;
-  max-width: 600px; /* Größere Tabellenbreite */
-  margin: 0 auto; /* Zentriere die Tabellen */
+  max-width: 800px;
+  margin: 20px auto;
   border-collapse: collapse; /* Entfernt doppelte Ränder */
   border: 1px solid #000; /* Äußere Begrenzung */
 }
 
-.gruppe th,
-.spielplan th {
-  background-color: #ccc;
+th,
+td {
+  border: 1px solid #000; /* Begrenzung der Zellen */
+  padding: 8px 12px;
   text-align: center;
-  padding: 8px;
-  border: 1px solid #000; /* Begrenzung der Kopfzellen */
 }
 
-.gruppe td,
-.spielplan td {
-  padding: 8px;
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Spezifische Stile für die Endrunde */
+.endrunde table {
+  border: 2px solid #000; /* Äußere Begrenzung */
+}
+
+.endrunde th,
+.endrunde td {
+  background-color: #e2e2e2; /* Leicht grauer Hintergrund für bessere Lesbarkeit */
+}
+
+.endrunde th {
+  background-color: #d4d4d4; /* Dunklerer Grauton für den Kopfbereich */
+  font-weight: bold;
+}
+
+/* Zusätzliche Stile für den Hinweis */
+#endrunde-hinweis {
+  color: #555;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+/* Gruppentabellen spezifisch */
+.gruppe h3 {
   text-align: center;
-  border: 1px solid #000; /* Begrenzung der Datenzellen */
+}
+
+.gruppe table {
+  max-width: 600px; /* Größere Tabellenbreite */
+  margin-bottom: 30px;
 }
 
 /* Responsive Stile: Kleinere Schrift auf kleineren Bildschirmen */
@@ -86,14 +114,13 @@ section h2 {
     font-size: 0.9em; /* Verkleinere die Details */
   }
 
-  .gruppe table,
-  .spielplan table {
+  table {
     font-size: 14px; /* Reduziere die Schriftgröße in den Tabellen */
   }
 
-  .gruppe td,
-  .spielplan td {
-    padding: 6px; /* Weniger Innenabstand */
+  th,
+  td {
+    padding: 6px 10px; /* Weniger Innenabstand */
   }
 }
 
@@ -106,68 +133,12 @@ section h2 {
     font-size: 0.8em; /* Noch kleinere Schrift für die Details */
   }
 
-  .gruppe table,
-  .spielplan table {
-    font-size: 12px; /* Noch kleinere Schrift in den Tabellen */
-  }
-
-  .gruppe td,
-  .spielplan td {
-    padding: 4px; /* Noch weniger Innenabstand */
-  }
-
-  /* Versteckt Elemente */
-  .hidden {
-    display: none;
-  }
-
-  /* Allgemeine Tabellenstile */
   table {
-    width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-    border-collapse: collapse;
+    font-size: 12px; /* Noch kleinere Schrift in den Tabellen */
   }
 
   th,
   td {
-    border: 1px solid #000;
-    padding: 8px 12px;
-    text-align: center;
-  }
-
-  th {
-    background-color: #f2f2f2;
-  }
-
-  /* Spezifische Stile für die Endrunde */
-  .endrunde table {
-    border: 2px solid #000; /* Äußere Begrenzung */
-  }
-
-  .endrunde th,
-  .endrunde td {
-    background-color: #e2e2e2; /* Leicht grauer Hintergrund für bessere Lesbarkeit */
-  }
-
-  .endrunde th {
-    background-color: #d4d4d4; /* Dunklerer Grauton für den Kopfbereich */
-    font-weight: bold;
-  }
-
-  /* Zusätzliche Stile für den Hinweis */
-  #endrunde-hinweis {
-    color: #555;
-    font-style: italic;
-    margin-top: 10px;
-  }
-
-  /* Gruppentabellen spezifisch */
-  .gruppe h3 {
-    text-align: center;
-  }
-
-  .gruppe table {
-    margin-bottom: 30px;
+    padding: 4px 8px; /* Noch weniger Innenabstand */
   }
 }
