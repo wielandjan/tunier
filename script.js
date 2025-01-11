@@ -26,7 +26,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
     const mannschaften = {};
     Object.entries(data.gruppen).forEach(([gruppenName, teams]) => {
       teams.forEach((team) => {
-        mannschaften[team.name] = { punkte: 0, tore: 0 };
+        mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore auf 0
       });
     });
 
@@ -45,9 +45,11 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
             const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
 
             if (!isNaN(toreHeim) && !isNaN(toreGast)) {
+              // Tore aktualisieren
               mannschaften[spiel.heim].tore += toreHeim;
               mannschaften[spiel.gast].tore += toreGast;
 
+              // Punkte basierend auf dem Ergebnis berechnen
               if (toreHeim > toreGast) {
                 mannschaften[spiel.heim].punkte += 3; // Heimsieg
               } else if (toreHeim < toreGast) {
