@@ -9,7 +9,7 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
     return response.json();
   })
   .then((data) => {
-    console.log("Turnierdetails geladen:", data); // Debugging: Daten anzeigen
+    console.log("Turnierdetails geladen:", data); // Debugging
 
     // Header-Daten
     document.getElementById("titel").textContent = data.titel;
@@ -21,14 +21,14 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       Pause: <strong>${data.pause}</strong> min
     `;
 
-    // Initialisiere Mannschaften mit Punkten und Toren
+    // Initialisiere Mannschaften (ohne Werte aus der JSON-Datei)
     const mannschaften = {};
     Object.entries(data.gruppen).forEach(([gruppenName, teams]) => {
       teams.forEach((team) => {
         mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore auf 0
       });
     });
-    console.log("Initialisierte Mannschaften:", mannschaften); // Debugging: Initialisierte Teams
+    console.log("Initialisierte Mannschaften:", mannschaften); // Debugging
 
     // Spielplan laden und Punkte/Tore berechnen
     fetch("spielplan.json?v=" + new Date().getTime())
@@ -39,22 +39,20 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
         return response.json();
       })
       .then((spielplanData) => {
-        console.log("Spielplan geladen:", spielplanData); // Debugging: Spielplan anzeigen
+        console.log("Spielplan geladen:", spielplanData); // Debugging
 
         // Berechne Punkte und Tore basierend auf dem Spielplan
         spielplanData.spielplan.forEach((spiel) => {
-          console.log(`Verarbeite Spiel: ${spiel.heim} vs ${spiel.gast}`); // Debugging: Spielinfo
+          console.log(`Verarbeite Spiel: ${spiel.heim} vs ${spiel.gast}`); // Debugging
           if (spiel.ergebnis && spiel.ergebnis.includes(":")) {
             const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
 
-            console.log(
-              `Ergebnis: ${toreHeim} - ${toreGast} (Heim: ${spiel.heim}, Gast: ${spiel.gast})`
-            ); // Debugging: Tore
-
             if (!isNaN(toreHeim) && !isNaN(toreGast)) {
+              // Tore aktualisieren
               mannschaften[spiel.heim].tore += toreHeim;
               mannschaften[spiel.gast].tore += toreGast;
 
+              // Punkte aktualisieren
               if (toreHeim > toreGast) {
                 mannschaften[spiel.heim].punkte += 3; // Heimsieg
               } else if (toreHeim < toreGast) {
@@ -63,21 +61,11 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
                 mannschaften[spiel.heim].punkte += 1; // Unentschieden
                 mannschaften[spiel.gast].punkte += 1;
               }
-
-              console.log(
-                `Nach Berechnung: Heim (${spiel.heim}): ${JSON.stringify(
-                  mannschaften[spiel.heim]
-                )}, Gast (${spiel.gast}): ${JSON.stringify(
-                  mannschaften[spiel.gast]
-                )}`
-              ); // Debugging: Aktuelle Werte
-            } else {
-              console.error(`Ungültiges Ergebnis: ${spiel.ergebnis}`); // Debugging: Fehler
             }
           }
         });
 
-        console.log("Endergebnisse der Mannschaften:", mannschaften); // Debugging: Endergebnisse
+        console.log("Endergebnisse der Mannschaften:", mannschaften); // Debugging
 
         // Gruppen mit berechneten Punkten und Toren anzeigen
         const gruppenContainer = document.getElementById("gruppen-container");
@@ -118,45 +106,6 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
           gruppeDiv.innerHTML = tabelleHTML;
           gruppenContainer.appendChild(gruppeDiv);
         });
-
-        // Spielplan anzeigen
-        const spielplanContainer = document.getElementById(
-          "spielplan-container"
-        );
-        let spielplanHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Nr.</th>
-                <th>Beginn</th>
-                <th>Feld</th>
-                <th>Heim</th>
-                <th>Gast</th>
-                <th>Ergebnis</th>
-              </tr>
-            </thead>
-            <tbody>
-        `;
-
-        spielplanData.spielplan.forEach((spiel) => {
-          spielplanHTML += `
-            <tr>
-              <td>${spiel.nr}</td>
-              <td>${spiel.beginn}</td>
-              <td>${spiel.feld}</td>
-              <td>${spiel.heim}</td>
-              <td>${spiel.gast}</td>
-              <td>${spiel.ergebnis}</td>
-            </tr>
-          `;
-        });
-
-        spielplanHTML += `
-            </tbody>
-          </table>
-        `;
-
-        spielplanContainer.innerHTML = spielplanHTML;
       })
       .catch((error) =>
         console.error("Fehler beim Laden des Spielplans:", error)
