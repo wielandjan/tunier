@@ -6,7 +6,7 @@ function berechnePunkteUndTore(gruppen, spielplan) {
   Object.values(gruppen)
     .flat()
     .forEach((team) => {
-      mannschaften[team.name] = { punkte: 0, tore: 0 };
+      mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore auf 0
     });
 
   // Ergebnisse aus dem Spielplan verarbeiten
@@ -15,10 +15,13 @@ function berechnePunkteUndTore(gruppen, spielplan) {
       // Überprüfe, ob ein gültiges Ergebnis vorliegt
       const [toreHeim, toreGast] = spiel.ergebnis.split(":").map(Number);
 
+      // Berechne nur, wenn Tore valide sind
       if (!isNaN(toreHeim) && !isNaN(toreGast)) {
+        // Tore aktualisieren
         mannschaften[spiel.heim].tore += toreHeim;
         mannschaften[spiel.gast].tore += toreGast;
 
+        // Punkte basierend auf dem Ergebnis berechnen
         if (toreHeim > toreGast) {
           mannschaften[spiel.heim].punkte += 3; // Heimsieg
         } else if (toreHeim < toreGast) {
