@@ -21,6 +21,9 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       Pause: <strong>${data.pause}</strong> min
     `;
 
+    // Initialisiere Mannschaften
+    const mannschaften = {}; // Variable muss hier deklariert werden
+
     console.log("Mannschaften vor Initialisierung:", mannschaften);
 
     Object.entries(data.gruppen).forEach(([gruppenName, teams]) => {
