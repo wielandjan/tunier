@@ -21,14 +21,23 @@ fetch("turnierdetails.json?v=" + new Date().getTime())
       Pause: <strong>${data.pause}</strong> min
     `;
 
-    // Initialisiere Mannschaften mit Punkten und Toren
-    const mannschaften = {};
+    console.log("Mannschaften vor Initialisierung:", mannschaften);
+
     Object.entries(data.gruppen).forEach(([gruppenName, teams]) => {
       teams.forEach((team) => {
-        mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore auf 0
+        if (!mannschaften[team.name]) {
+          console.log(`Initialisiere ${team.name} mit 0 Punkten und Toren.`);
+        } else {
+          console.error(
+            `${team.name} war bereits initialisiert:`,
+            mannschaften[team.name]
+          );
+        }
+        mannschaften[team.name] = { punkte: 0, tore: 0 }; // Setze Punkte und Tore
       });
     });
-    console.log("Initialisierte Mannschaften:", mannschaften); // Debugging: Initialisierte Teams
+
+    console.log("Mannschaften nach Initialisierung:", mannschaften);
 
     // Spielplan laden und Punkte/Tore berechnen
     fetch("spielplan.json?v=" + new Date().getTime())
